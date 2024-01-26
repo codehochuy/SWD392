@@ -1,5 +1,6 @@
 package com.example.swd392.auth;
 
+import com.example.swd392.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ public class RegisterRequest {
     private String name;
     private String email;
     private String password;
+    private Role role;
 //    private String address;
 //    private String phone;
 //    private boolean status;
