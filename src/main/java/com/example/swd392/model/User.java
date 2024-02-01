@@ -27,28 +27,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UsersID")
     private int usersID;
+
+    @Column(name = "AccountName", length = 20)
+    private String accountName;
+
+    @Column(name = "Email", length = 50)
     private String email;
-    private String name;
+
+    @Column(name = "Avatar", length = 50)
+    private String avatar;
+
+    @Column(name = "Password", length = 100)
     private String password;
 
-//    @Column(name = "Email", nullable = false)
-//    private String email;
-//
-//    @Column(name = "Name", nullable = false)
-//    private String name;
-//
-//    @Column(name = "Password", nullable = false)
-//    private String password;
-//
-//    @Column(name = "Address")
-//    private String address;
-//
-//    @Column(name = "Phone")
-//    private String phone;
-//
-//    @Column(name = "Status")
-//    private Boolean status;
-//
+    @Column(name = "Phone", length = 50)
+    private String phone;
+
+    @Column(name = "UserStatus")
+    private boolean userStatus;
+
+
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

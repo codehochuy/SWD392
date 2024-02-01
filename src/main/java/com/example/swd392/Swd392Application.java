@@ -38,13 +38,18 @@ public class Swd392Application {
 			var admin= RegisterRequest.builder()
 					.name("Admin")
 					.email("Admin@gmail.com")
+					.avatar("admin.jpg")
 					.password("123")
+					.phone("0392272536")
+					.status(true)
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
 			var user = RegisterRequest.builder()
-					.name("huycute")
+					.name("Tran Huy")
 					.email("huypt110402@gmail.com")
+					.avatar("huy.jpg")
+					.status(true)
 					.password("123")
 					.role(GUEST)
 					.build();

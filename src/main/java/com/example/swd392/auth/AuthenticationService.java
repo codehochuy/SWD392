@@ -31,10 +31,11 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
-                .name(request.getName())
+                .accountName(request.getName())
+                .avatar(request.getAvatar())
                 .password(passwordEncoder.encode(request.getPassword()))
-//                .address(request.getAddress())
-//                .phone(request.getPhone())
+                .phone(request.getPhone())
+                .userStatus(request.isStatus())
                 .role(request.getRole())
                 .build();
         var save = userRepo.save(user);
@@ -42,7 +43,7 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(save, jwtToken);
         return AuthenticationResponse.builder()
-                .status("Hello")
+                .status("You have successfully registered.")
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
