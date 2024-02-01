@@ -14,36 +14,57 @@ import static com.example.swd392.enums.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {
-    USER(Collections.emptySet()),
+    GUEST(Collections.emptySet()),
+    CREATOR(
+            Set.of(
+                    CREATOR_DELETE,
+                    CREATOR_CREATE,
+                    CREATOR_READ,
+                    CREATOR_UPDATE
+            )),
+    AUDIENCE(
+            Set.of(
+                    AUDIENCE_CREATE,
+                    AUDIENCE_DELETE,
+                    AUDIENCE_UPDATE,
+                    AUDIENCE_READ
+            )),
     ADMIN(
             Set.of(
-                    ADMIN_DELETE,
                     ADMIN_CREATE,
-                    ADMIN_READ,
+                    ADMIN_DELETE,
                     ADMIN_UPDATE,
-
-                    MANAGER_CREATE,
-                    MANAGER_DELETE,
-                    MANAGER_UPDATE,
-                    MANAGER_READ
+                    ADMIN_READ
             )),
-    MANAGER(
+    SUPER_ADMIN(
             Set.of(
-                    MANAGER_CREATE,
-                    MANAGER_DELETE,
-                    MANAGER_UPDATE,
-                    MANAGER_READ
+                    SUPER_ADMIN_CREATE,
+                    SUPER_ADMIN_DELETE,
+                    SUPER_ADMIN_UPDATE,
+                    SUPER_ADMIN_READ
             ))
+
     ;
 
     @Getter
     private final Set<Permission> permissions;
-    public List<SimpleGrantedAuthority> getAuthorities(){
-        var author = getPermissions()
-                .stream()
-                .map(permission -> new SimpleGrantedAuthority(permission.name()))
-                .toList();
-        author.add(new SimpleGrantedAuthority("ROLE_"+ this.name()) );
-        return author;
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        var authorities =
+               getPermissions().stream()
+                        .map(permission1 -> new SimpleGrantedAuthority(permission1.getPermission()))
+                        .collect(Collectors.toList());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+
+        return authorities;
     }
+//    public List<SimpleGrantedAuthority> getAuthorities(){
+//        var author = getPermissions()
+//                .stream()
+//                .map(permission -> new SimpleGrantedAuthority(permission.name()))
+//                .toList();
+//        System.out.println(author);
+//        author.add(new SimpleGrantedAuthority("ROLE_"+ this.name()) );
+//        return author;
+//    }
+
 }

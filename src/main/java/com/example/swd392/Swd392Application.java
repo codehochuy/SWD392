@@ -13,7 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import static com.example.swd392.enums.Role.ADMIN;
-import static com.example.swd392.enums.Role.MANAGER;
+import static com.example.swd392.enums.Role.GUEST;
+
 
 @SpringBootApplication
 @EnableWebSecurity
@@ -41,13 +42,20 @@ public class Swd392Application {
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
-			var manager = RegisterRequest.builder()
-					.name("Manager")
-					.email("Manager@gmail.com")
+			var user = RegisterRequest.builder()
+					.name("huycute")
+					.email("huypt110402@gmail.com")
 					.password("123")
-					.role(MANAGER)
+					.role(GUEST)
 					.build();
-			System.out.println("Manager token :"+ service.register(manager).getAccessToken());
+			System.out.println("User token :"+ service.register(user).getAccessToken());
+//			var manager = RegisterRequest.builder()
+//					.name("Manager")
+//					.email("Manager@gmail.com")
+//					.password("123")
+//					.role(MANAGER)
+//					.build();
+//			System.out.println("Manager token :"+ service.register(manager).getAccessToken());
 		};
 
 

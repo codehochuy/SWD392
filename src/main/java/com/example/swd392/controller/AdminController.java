@@ -8,23 +8,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
-
-    @GetMapping("/")
+    @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
-    public String get(){
-        return "GET::Admin Controller";
+    public String get() {
+        return "GET:: admin controller";
     }
-    @PostMapping("/")
-    public String post(){
-        return "POST::Admin Controller";
+    @PostMapping
+    @PreAuthorize("hasAuthority('admin:create')")
+    public String post() {
+        return "POST:: admin controller";
     }
-    @DeleteMapping("/")
-    public String delete(){
-        return "DELETE::Admin Controller";
-    }
-    @PutMapping("/")
-    public String put(){
-        return "PUT::Admin Controller";
+    @PutMapping
+    @PreAuthorize("hasAuthority('admin:update')")
+    public String put() {
+        return "PUT:: admin controller";
     }
 
 }
