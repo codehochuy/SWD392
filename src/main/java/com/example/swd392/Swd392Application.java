@@ -12,8 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.example.swd392.enums.Role.ADMIN;
-import static com.example.swd392.enums.Role.GUEST;
+import static com.example.swd392.enums.Role.*;
 
 
 @SpringBootApplication
@@ -35,32 +34,59 @@ public class Swd392Application {
 			AuthenticationService service
 	){
 		return args -> {
+			var super_admin= RegisterRequest.builder()
+					.name("Super Admin")
+					.email("Superadmin@gmail.com")
+//					.avatar("admin.jpg")
+					.password("123")
+					.phone("0326514968")
+					.status(true)
+					.role(SUPER_ADMIN)
+					.build();
+			System.out.println("Super_Admin token :"+ service.register(super_admin).getAccessToken());
+
 			var admin= RegisterRequest.builder()
 					.name("Admin")
 					.email("Admin@gmail.com")
-					.avatar("admin.jpg")
+//					.avatar("admin.jpg")
 					.password("123")
 					.phone("0392272536")
 					.status(true)
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
-			var user = RegisterRequest.builder()
-					.name("Tran Huy")
-					.email("huypt110402@gmail.com")
-					.avatar("huy.jpg")
+
+			var audience = RegisterRequest.builder()
+					.name("David")
+					.email("david@gmail.com")
+//					.avatar("huy.jpg")
 					.status(true)
 					.password("123")
+					.phone("0854512367")
+					.role(AUDIENCE)
+					.build();
+			System.out.println("Audience token :"+ service.register(audience).getAccessToken());
+			var creator = RegisterRequest.builder()
+					.name("John")
+					.email("john@gmail.com")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0326514875")
+					.role(CREATOR)
+					.build();
+			System.out.println("Creator token :"+ service.register(creator).getAccessToken());
+
+			var guest = RegisterRequest.builder()
+					.name("Trần Huy")
+					.email("huypt110402@gmail.com")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0369587452")
 					.role(GUEST)
 					.build();
-			System.out.println("User token :"+ service.register(user).getAccessToken());
-//			var manager = RegisterRequest.builder()
-//					.name("Manager")
-//					.email("Manager@gmail.com")
-//					.password("123")
-//					.role(MANAGER)
-//					.build();
-//			System.out.println("Manager token :"+ service.register(manager).getAccessToken());
+			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
 		};
 
 

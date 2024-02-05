@@ -34,8 +34,12 @@ public class User implements UserDetails {
     @Column(name = "Email", length = 50)
     private String email;
 
-    @Column(name = "Avatar", length = 50)
-    private String avatar;
+//    @Column(name = "Avatar", length = 50)
+//    private String avatar;
+
+    @Lob
+    @Column(name = "Avatar", length = 1000)
+    private byte[] avatar;
 
     @Column(name = "Password", length = 100)
     private String password;
