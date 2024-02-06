@@ -1,13 +1,18 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.User;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,8 +36,23 @@ public class UserController {
     public ResponseEntity<UpdateUserResponse> updateUser(
             @PathVariable String email,
             @RequestBody UpdateUserRequest updateUserRequest) {
-        UpdateUserResponse response = iUserService.updateUser(email, updateUserRequest);
+//        UpdateUserResponse response = iUserService.updateUser(email, updateUserRequest);
         return ResponseEntity.ok(iUserService.updateUser(email, updateUserRequest));
+    }
+    @PostMapping("/avatar/{email}")
+    public ResponseEntity<ChangeAvatarResponse> changeAvatar(
+            @PathVariable String email,
+            @RequestParam("image") MultipartFile file) throws IOException {
+        ChangeAvatarResponse changeAvatar = iUserService.changeAvatar(email, file);
+        return ResponseEntity.ok(changeAvatar);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<?> downloadImage(@PathVariable String email){
+        byte[] imageData=iUserService.downloadImage(email);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(imageData);
+
     }
 
 

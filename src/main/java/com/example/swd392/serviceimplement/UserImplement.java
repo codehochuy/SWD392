@@ -1,6 +1,7 @@
 package com.example.swd392.serviceimplement;
 
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.Util.ImageUtil;
 import com.example.swd392.auth.RegisterRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserImplement implements UserService {
@@ -49,10 +51,9 @@ public class UserImplement implements UserService {
             existedUser.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
             existedUser.setPhone(updateUserRequest.getPhone());
             userRepo.save(existedUser);
-            User user = userRepo.findUserByEmail(email).orElse(null);
             return UpdateUserResponse.builder()
                     .status("Update User Successful")
-                    .user(user)
+                    .user(existedUser)
                     .build();
         }
         else{
@@ -65,9 +66,44 @@ public class UserImplement implements UserService {
     }
 
     @Override
-    public User changeAvatar(int userId, MultipartFile file) {
+    public ChangeAvatarResponse changeAvatar(String email, MultipartFile file) throws IOException {
+        var user = userRepo.findUserByEmail(email).orElse(null);
+        if (user != null) {
+            user.setAvatar(ImageUtil.compressImage(file.getBytes()));
+            userRepo.save(user);
+            return ChangeAvatarResponse.builder()
+                    .status("Update Avatar Successful")
+                    .user(getUserInfo(email))
+                    .build();
+        } else {
+            return ChangeAvatarResponse.builder()
+                    .status("User Not Found")
+                    .user(null)
+                    .build();
+        }
+    }
+    @Override
+    public byte[] downloadImage(String email){
+        User user = userRepo.findUserByEmail(email).orElse(null);
+        byte[] images=ImageUtil.decompressImage(user.getAvatar());
+        return images;
+    }
+
+    public User getUserInfo(String email){
+        User user = userRepo.findUserByEmail(email).orElse(null);
+        if(user != null){
+            byte[] compressedImage = user.getAvatar();
+            if (compressedImage != null && compressedImage.length > 0) {
+                byte[] decompressedImage = ImageUtil.decompressImage(compressedImage);
+                user.setAvatar(decompressedImage);
+            }
+            return user;
+        }
         return null;
     }
+
+
+
 
 
 }
