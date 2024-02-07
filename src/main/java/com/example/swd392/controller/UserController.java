@@ -1,8 +1,12 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
+import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.auth.AuthenticationResponse;
+import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.model.User;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,26 +61,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-    }
-
-    @PostMapping("/ban/{email}")
-    public ResponseEntity<UpdateUserResponse> banUser(@PathVariable String email) {
-        UpdateUserResponse response = iUserService.banUser(email);
-        if (response.getUser() != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
-    }
-
-    @PostMapping("/unban/{email}")
-    public ResponseEntity<UpdateUserResponse> unbanUser(@PathVariable String email) {
-        UpdateUserResponse response = iUserService.unbanUser(email);
-        if (response.getUser() != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
     }
 
 

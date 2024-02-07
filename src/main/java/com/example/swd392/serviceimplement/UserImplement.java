@@ -1,9 +1,12 @@
 package com.example.swd392.serviceimplement;
 
+import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
+import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.Util.ImageUtil;
+import com.example.swd392.auth.AuthenticationResponse;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.enums.Role;
 import com.example.swd392.model.User;
@@ -30,18 +33,6 @@ public class UserImplement implements UserService {
         return userRepo.findAll();
     }
 
-    @Override
-    public User register(MultipartFile multipartFile, RegisterRequest request) throws IOException {
-        return userRepo.save(User.builder()
-                .accountName(request.getName())
-                .email(request.getEmail())
-                .avatar(ImageUtil.compressImage(multipartFile.getBytes()))
-                .password(passwordEncoder.encode(request.getPassword()))
-                .phone(request.getPhone())
-                .userStatus(true)
-                .role(Role.GUEST).build());
-
-    }
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {

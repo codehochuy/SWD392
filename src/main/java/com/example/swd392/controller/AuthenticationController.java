@@ -1,5 +1,7 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.UserRequest.CreatUserRequest;
+import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.auth.AuthenticationRequest;
 import com.example.swd392.auth.AuthenticationResponse;
 import com.example.swd392.auth.AuthenticationService;
@@ -41,6 +43,11 @@ public class AuthenticationController {
     ) throws IOException {
         authenticationService.refreshToken(request,response);
 
+    }
+
+    @PostMapping("/createUser")
+    public ResponseEntity<CreateUserResponse> register(@RequestBody CreatUserRequest request) throws IOException {
+        return ResponseEntity.ok(authenticationService.createUser(request));
     }
 
 //

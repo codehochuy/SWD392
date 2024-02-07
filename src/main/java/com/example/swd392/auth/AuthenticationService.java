@@ -1,5 +1,7 @@
 package com.example.swd392.auth;
 
+import com.example.swd392.Request.UserRequest.CreatUserRequest;
+import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.config.JwtService;
 import com.example.swd392.enums.Role;
 import com.example.swd392.enums.TokenType;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,56 @@ public class AuthenticationService {
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public CreateUserResponse createUser(CreatUserRequest request) throws IOException {
+        String email = request.getEmail();
+        String role = request.getUserRole();
+        Optional<User> existingUser = userRepo.findUserByEmail(email);
+        if (existingUser.isPresent()) {
+            return CreateUserResponse.builder()
+                    .status("Email already exists")
+                    .user(null)
+                    .build();
+        }else{
+            if (role.equalsIgnoreCase("Audience")) {
+                var register = User.builder()
+                        .email(request.getEmail())
+                        .accountName(request.getName())
+//                .avatar(request.getAvatar())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .phone(request.getPhone())
+                        .userStatus(true)
+                        .role(Role.AUDIENCE)
+                        .build();
+                userRepo.save(register);
+                return CreateUserResponse.builder()
+                        .status("You have successfully registered with role"+Role.AUDIENCE)
+                        .user(register)
+                        .build();
+
+            } else if(role.equalsIgnoreCase("Creator")) {
+                var register = User.builder()
+                        .email(request.getEmail())
+                        .accountName(request.getName())
+//                .avatar(request.getAvatar())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .phone(request.getPhone())
+                        .userStatus(true)
+                        .role(Role.CREATOR)
+                        .build();
+                userRepo.save(register);
+                return CreateUserResponse.builder()
+                        .status("You have successfully registered with role"+Role.CREATOR)
+                        .user(register)
+                        .build();
+            }else{
+                return CreateUserResponse.builder()
+                        .status("This role not found")
+                        .user(null)
+                        .build();
+            }
+        }
     }
 
     private void revokeAllUserTokens(User user) {
