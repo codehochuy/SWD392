@@ -23,4 +23,6 @@ public interface UserService {
 
     public UpdateUserResponse banUser(String email);
     public UpdateUserResponse unbanUser(String email);
+
+    public List<User> getCreator();
 }

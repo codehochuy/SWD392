@@ -23,8 +23,17 @@ public class Artwork {
     @Column(name = "ArtworkName", length = 30)
     private String artworkName;
 
+    @Column(name = "ArtworkUrl", length = 1000)
+    private byte[] artworkUrl;
+
     @Column(name = "PostedAt")
     private LocalDateTime postedAt;
+
+    @Column(name = "LikeCount")
+    private int likeCount;
+
+    @Column(name = "CommentCount")
+    private int commentCount;
 
     @ManyToOne
     @JoinColumn(name = "UsersID")

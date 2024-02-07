@@ -27,17 +27,24 @@ public class UserImplement implements UserService {
     private UserRepo userRepo;
 
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<User> getAll() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public List<User> getCreator() {
+        Role creatorRole = Role.CREATOR;
+        return userRepo.findByRole(creatorRole);
     }
 
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {
         var existedUser = userRepo.findUserByEmail(email).orElse(null);
-        if(existedUser!= null){
+        if (existedUser != null) {
             existedUser.setAccountName(updateUserRequest.getName());
             existedUser.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
             existedUser.setPhone(updateUserRequest.getPhone());
@@ -46,8 +53,7 @@ public class UserImplement implements UserService {
                     .status("Update User Successful")
                     .user(existedUser)
                     .build();
-        }
-        else{
+        } else {
             return UpdateUserResponse.builder()
                     .status("User Not Found")
                     .user(null)
@@ -73,10 +79,11 @@ public class UserImplement implements UserService {
                     .build();
         }
     }
+
     @Override
-    public byte[] downloadImage(String email){
+    public byte[] downloadImage(String email) {
         User user = userRepo.findUserByEmail(email).orElse(null);
-        if(user == null || user.getAvatar() == null){
+        if (user == null || user.getAvatar() == null) {
             return null;
         }
         return ImageUtil.decompressImage(user.getAvatar());
@@ -86,15 +93,14 @@ public class UserImplement implements UserService {
     public UpdateUserResponse banUser(String email) {
         var banUser = userRepo.findUserByEmail(email).orElse(null);
 //        var banUser = userRepo.findUserByUsersID(userID).orElse(null);
-        if(banUser!= null){
+        if (banUser != null) {
             banUser.setUserStatus(false);
             userRepo.save(banUser);
             return UpdateUserResponse.builder()
                     .status("Ban User Successful")
                     .user(banUser)
                     .build();
-        }
-        else{
+        } else {
             return UpdateUserResponse.builder()
                     .status("User Not Found")
                     .user(null)
@@ -107,15 +113,14 @@ public class UserImplement implements UserService {
     public UpdateUserResponse unbanUser(String email) {
         var unbanUser = userRepo.findUserByEmail(email).orElse(null);
 //        var unbanUser = userRepo.findUserByUsersID(userID).orElse(null);
-        if(unbanUser!= null){
+        if (unbanUser != null) {
             unbanUser.setUserStatus(true);
             userRepo.save(unbanUser);
             return UpdateUserResponse.builder()
                     .status("UnBan User Successful")
                     .user(unbanUser)
                     .build();
-        }
-        else{
+        } else {
             return UpdateUserResponse.builder()
                     .status("User Not Found")
                     .user(null)
@@ -124,9 +129,9 @@ public class UserImplement implements UserService {
         }
     }
 
-    public User getUserInfo(String email){
+    public User getUserInfo(String email) {
         User user = userRepo.findUserByEmail(email).orElse(null);
-        if(user != null){
+        if (user != null) {
             byte[] compressedImage = user.getAvatar();
             if (compressedImage != null && compressedImage.length > 0) {
                 byte[] decompressedImage = ImageUtil.decompressImage(compressedImage);
@@ -136,9 +141,6 @@ public class UserImplement implements UserService {
         }
         return null;
     }
-
-
-
 
 
 }
