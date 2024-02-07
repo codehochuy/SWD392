@@ -49,11 +49,36 @@ public class UserController {
 
     @GetMapping("/{email}")
     public ResponseEntity<?> downloadImage(@PathVariable String email){
-        byte[] imageData=iUserService.downloadImage(email);
+        byte[] imageData = iUserService.downloadImage(email);
+        if(imageData == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Avatar not found" + email);
+        }
         return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
-
     }
+
+    @PostMapping("/ban/{email}")
+    public ResponseEntity<UpdateUserResponse> banUser(@PathVariable String email) {
+        UpdateUserResponse response = iUserService.banUser(email);
+        if (response.getUser() != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @PostMapping("/unban/{email}")
+    public ResponseEntity<UpdateUserResponse> unbanUser(@PathVariable String email) {
+        UpdateUserResponse response = iUserService.unbanUser(email);
+        if (response.getUser() != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
 
 
 }

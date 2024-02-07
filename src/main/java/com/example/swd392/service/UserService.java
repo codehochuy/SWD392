@@ -20,4 +20,7 @@ public interface UserService {
     public ChangeAvatarResponse changeAvatar(String email, MultipartFile file) throws IOException;
 
     public byte[] downloadImage(String fileName);
+
+    public UpdateUserResponse banUser(String email);
+    public UpdateUserResponse unbanUser(String email);
 }
