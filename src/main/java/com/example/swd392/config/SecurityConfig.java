@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static com.example.swd392.enums.Permission.*;
 import static com.example.swd392.enums.Role.ADMIN;
+import static com.example.swd392.enums.Role.CREATOR;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -46,7 +47,12 @@ public class SecurityConfig {
                         .requestMatchers(PUT, "/api/v1/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
 
-                        //Audience controller role
+                        //Creator controller role
+                        .requestMatchers("/api/v1/creator/**").hasAnyRole(CREATOR.name())
+                        .requestMatchers(GET, "/api/v1/creator/**").hasAnyAuthority(CREATOR_READ.name())
+                        .requestMatchers(POST, "/api/v1/creator/**").hasAnyAuthority(CREATOR_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/creator/**").hasAnyAuthority(CREATOR_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/creator/**").hasAnyAuthority(CREATOR_DELETE.name())
 
                         .anyRequest()
                         .authenticated())

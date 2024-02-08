@@ -1,5 +1,6 @@
 package com.example.swd392.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Artwork {
     @Column(name = "ArtworkName", length = 30)
     private String artworkName;
 
+    @Lob
     @Column(name = "ArtworkUrl", length = 1000)
     private byte[] artworkUrl;
 
@@ -36,6 +38,7 @@ public class Artwork {
     private int commentCount;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "UsersID")
     private User user;
 }

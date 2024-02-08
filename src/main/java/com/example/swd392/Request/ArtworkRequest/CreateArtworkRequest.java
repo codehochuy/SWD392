@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateArtworkRequest {
     private String artworkName;
-    private User creator;
+    private int creator;
 }
