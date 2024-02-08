@@ -1,6 +1,7 @@
 package com.example.swd392.serviceimplement;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
+import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Util.ImageUtil;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Service
 public class ArtworkServiceImplement implements ArtworkService {
 
@@ -24,6 +26,7 @@ public class ArtworkServiceImplement implements ArtworkService {
     private ArtworkRepo artworkRepo;
     @Autowired
     private UserRepo userRepo;
+
     @Override
     public List<Artwork> getListArtworkForGuest() {
         return artworkRepo.findAll();
@@ -33,13 +36,32 @@ public class ArtworkServiceImplement implements ArtworkService {
     public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException {
         String artworkName = request.getArtworkName();
         LocalDateTime postedAt = LocalDateTime.now();
+        double price = request.getPrice();
         int creator = request.getCreator();
+        //Check validate
+        if (artworkName == null || artworkName.isEmpty()) {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork name cannot be empty")
+                    .artwork(null)
+                    .build();
+        } else if (artworkName.length() > 30) {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork name must not exceed 30 characters")
+                    .artwork(null)
+                    .build();
+        } else if (price <= 0 || price > 100000000) {
+            return CreateArtworkResponse.builder()
+                    .status("Wrong value !")
+                    .artwork(null)
+                    .build();
+        }
         var user = userRepo.findUserByUsersID(creator).orElse(null);
-        if(user!= null && user.getRole() == Role.CREATOR){
+        if (user != null && user.getRole() == Role.CREATOR) {
             Artwork artwork = Artwork.builder()
                     .artworkName(artworkName)
                     .artworkUrl(ImageUtil.compressImage(file.getBytes()))
                     .user(user)
+                    .price(price)
                     .commentCount(0)
                     .likeCount(0)
                     .postedAt(postedAt)
@@ -67,5 +89,37 @@ public class ArtworkServiceImplement implements ArtworkService {
             return DeleteArtworkResponse.builder().status("Artwork does not exist").build();
         }
     }
+
+    @Override
+    public CreateArtworkResponse updateArtwork(int artworkId, UpdateArtworkRequest request) {
+        String name = request.getArtworkName();
+        double price = request.getPrice();
+        if (name.length() > 30) {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork name must not exceed 30 characters")
+                    .artwork(null)
+                    .build();
+        }
+        if (price <= 0 || price > 100000000) {
+            return CreateArtworkResponse.builder()
+                    .status("Wrong value for price!")
+                    .artwork(null)
+                    .build();
+        }
+        var artWork = artworkRepo.findByArtworkId(artworkId).orElse(null);
+        if (artWork != null) {
+            artWork.setArtworkName(name);
+            artWork.setPrice(price);
+            return CreateArtworkResponse.builder()
+                    .status("Update ArtWork Successfully")
+                    .artwork(artWork).build();
+        } else {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork does not exist")
+                    .artwork(null)
+                    .build();
+        }
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
+import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.service.ArtworkService;
@@ -25,10 +26,12 @@ public class CreatorController {
     public ResponseEntity<CreateArtworkResponse> createArtwork(
             @RequestParam("artworkName") String artworkName,
             @RequestParam("creator") int creator,
+            @RequestParam("price") double price,
             @RequestParam("file") MultipartFile file) throws IOException {
         CreateArtworkRequest request = new CreateArtworkRequest();
         request.setArtworkName(artworkName);
         request.setCreator(creator);
+        request.setPrice(price);
         CreateArtworkResponse response = artworkService.createArtwork(request, file);
         return ResponseEntity.ok(response);
     }
@@ -38,6 +41,15 @@ public class CreatorController {
     @PreAuthorize("hasAuthority('creator:delete')")
     public DeleteArtworkResponse deleteArtwork(@PathVariable("id") int artworkId) {
         return artworkService.deleteArtwork(artworkId);
+    }
+
+    @PutMapping("/updateArtwork/{artworkId}")
+    @PreAuthorize("hasAuthority('creator:update')")
+    public ResponseEntity<CreateArtworkResponse> updateArtwork(
+            @PathVariable int artworkId,
+            @RequestBody UpdateArtworkRequest request) {
+        CreateArtworkResponse response = artworkService.updateArtwork(artworkId, request);
+        return ResponseEntity.ok(response);
     }
 
 

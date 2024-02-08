@@ -31,6 +31,9 @@ public class Artwork {
     @Column(name = "PostedAt")
     private LocalDateTime postedAt;
 
+    @Column(name = "Price")
+    private double price;
+
     @Column(name = "LikeCount")
     private int likeCount;
 
