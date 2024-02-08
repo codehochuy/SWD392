@@ -1,18 +1,15 @@
 package com.example.swd392.controller;
 
-import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
-import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
-import com.example.swd392.auth.AuthenticationResponse;
-import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.model.User;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,22 +18,27 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
-public class UserController {
+@PreAuthorize("hasRole('AUDIENCE')")
+public class AudienceController {
 
     @Autowired
     private UserService iUserService;
 
     @GetMapping("/list")
-    public List<User> getAllRole() {
+//    @PreAuthorize("hasAuthority('audience:read')")
+    @PreAuthorize("hasAnyAuthority('audience:read','creator:read')")
+    public List<User> getAllUser() {
         return iUserService.getAll();
     }
 
     @GetMapping("/test")
+    @PreAuthorize("hasAuthority('audience:read')")
     private ResponseEntity<String> sayHello() {
         return ResponseEntity.ok("Hello");
     }
 
-    @PostMapping("/updateUser/{email}")
+    @PutMapping("/updateUser/{email}")
+    @PreAuthorize("hasAuthority('audience:update')")
     public ResponseEntity<UpdateUserResponse> updateUser(
             @PathVariable String email,
             @RequestBody UpdateUserRequest updateUserRequest) {
@@ -44,6 +46,7 @@ public class UserController {
         return ResponseEntity.ok(iUserService.updateUser(email, updateUserRequest));
     }
     @PostMapping("/avatar/{email}")
+    @PreAuthorize("hasAuthority('audience:create')")
     public ResponseEntity<ChangeAvatarResponse> changeAvatar(
             @PathVariable String email,
             @RequestParam("image") MultipartFile file) throws IOException {
@@ -52,6 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
+    @PreAuthorize("hasAuthority('audience:read')")
     public ResponseEntity<?> downloadImage(@PathVariable String email){
         byte[] imageData = iUserService.downloadImage(email);
         if(imageData == null){

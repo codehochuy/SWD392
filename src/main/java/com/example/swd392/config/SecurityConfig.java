@@ -18,8 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import static com.example.swd392.enums.Permission.*;
-import static com.example.swd392.enums.Role.ADMIN;
-import static com.example.swd392.enums.Role.CREATOR;
+import static com.example.swd392.enums.Role.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
@@ -48,11 +47,19 @@ public class SecurityConfig {
                         .requestMatchers(DELETE, "/api/v1/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
 
                         //Creator controller role
-                        .requestMatchers("/api/v1/creator/**").hasAnyRole(CREATOR.name())
-                        .requestMatchers(GET, "/api/v1/creator/**").hasAnyAuthority(CREATOR_READ.name())
-                        .requestMatchers(POST, "/api/v1/creator/**").hasAnyAuthority(CREATOR_CREATE.name())
-                        .requestMatchers(PUT, "/api/v1/creator/**").hasAnyAuthority(CREATOR_UPDATE.name())
-                        .requestMatchers(DELETE, "/api/v1/creator/**").hasAnyAuthority(CREATOR_DELETE.name())
+                        .requestMatchers("/api/v1/**").hasAnyRole(CREATOR.name(),AUDIENCE.name())
+                        .requestMatchers(GET, "/api/v1/**").hasAnyAuthority(CREATOR_READ.name(),AUDIENCE_READ.name())
+                        .requestMatchers(POST, "/api/v1/**").hasAnyAuthority(CREATOR_CREATE.name(),AUDIENCE_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/**").hasAnyAuthority(CREATOR_UPDATE.name(),AUDIENCE_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(CREATOR_DELETE.name(),AUDIENCE_DELETE.name())
+
+                        // Audience controller role
+
+                        .requestMatchers("/api/v1/user/**").hasAnyRole(AUDIENCE.name())
+                        .requestMatchers(GET, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_READ.name())
+                        .requestMatchers(POST, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_CREATE.name())
+                        .requestMatchers(PUT, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_UPDATE.name())
+                        .requestMatchers(DELETE, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_DELETE.name())
 
                         .anyRequest()
                         .authenticated())

@@ -20,7 +20,12 @@ public enum Role {
                     CREATOR_DELETE,
                     CREATOR_CREATE,
                     CREATOR_READ,
-                    CREATOR_UPDATE
+                    CREATOR_UPDATE,
+
+                    AUDIENCE_CREATE,
+                    AUDIENCE_DELETE,
+                    AUDIENCE_UPDATE,
+                    AUDIENCE_READ
             )),
     AUDIENCE(
             Set.of(
@@ -41,7 +46,13 @@ public enum Role {
                     SUPER_ADMIN_CREATE,
                     SUPER_ADMIN_DELETE,
                     SUPER_ADMIN_UPDATE,
-                    SUPER_ADMIN_READ
+                    SUPER_ADMIN_READ,
+
+                    ADMIN_CREATE,
+                    ADMIN_DELETE,
+                    ADMIN_UPDATE,
+                    ADMIN_READ
+
             ))
 
     ;
