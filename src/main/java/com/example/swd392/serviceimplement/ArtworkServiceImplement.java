@@ -2,6 +2,7 @@ package com.example.swd392.serviceimplement;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
+import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Util.ImageUtil;
 import com.example.swd392.enums.Role;
 import com.example.swd392.model.Artwork;
@@ -54,6 +55,16 @@ public class ArtworkServiceImplement implements ArtworkService {
                     .status("Create Artwork Fail")
                     .artwork(null)
                     .build();
+        }
+    }
+
+    @Override
+    public DeleteArtworkResponse deleteArtwork(int artworkId) {
+        if (artworkRepo.existsById(artworkId)) {
+            artworkRepo.deleteById(artworkId);
+            return DeleteArtworkResponse.builder().status("Deleted ArtWork Successfully").build();
+        } else {
+            return DeleteArtworkResponse.builder().status("Artwork does not exist").build();
         }
     }
 

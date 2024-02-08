@@ -2,6 +2,7 @@ package com.example.swd392.controller;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
+import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.service.ArtworkService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,13 @@ public class CreatorController {
         request.setCreator(creator);
         CreateArtworkResponse response = artworkService.createArtwork(request, file);
         return ResponseEntity.ok(response);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('creator:delete')")
+    public DeleteArtworkResponse deleteArtwork(@PathVariable("id") int artworkId) {
+        return artworkService.deleteArtwork(artworkId);
     }
 
 
