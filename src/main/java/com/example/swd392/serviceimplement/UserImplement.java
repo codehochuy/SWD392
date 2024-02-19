@@ -1,9 +1,11 @@
 package com.example.swd392.serviceimplement;
 
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
+import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.CreateUserResponse;
+import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.Util.ImageUtil;
 import com.example.swd392.auth.AuthenticationResponse;
@@ -13,6 +15,7 @@ import com.example.swd392.model.User;
 import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,30 @@ public class UserImplement implements UserService {
         Role creatorRole = Role.CREATOR;
         return userRepo.findByRole(creatorRole);
     }
+
+    @Override
+    public ResponseEntity<ResponseUser> searchUsers(SearchRequest req) {
+        try {
+            List<User> userList = userRepo.findAll();
+            if(req.getUserId() != null){
+                userList = userList.stream().filter(n -> n.getUsersID() == req.getUserId()).toList();
+            }
+            if(req.getName() != null && !req.getName().trim().isEmpty()){
+                userList = userList.stream().filter(n -> n.getUsername().contains(req.getName())).toList();
+            }
+            if(req.getEmail() != null && !req.getEmail().trim().isEmpty()){
+                userList = userList.stream().filter(n -> n.getEmail().contains(req.getEmail())).toList();
+            }
+            return ResponseEntity.ok(new ResponseUser("Success","List users", userList));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ResponseUser.builder()
+                    .status("Fail")
+                    .message("List user fail")
+                    .userList(null)
+                    .build());
+        }
+    }
+
 
 
     @Override

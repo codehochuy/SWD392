@@ -1,5 +1,7 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.UserRequest.SearchRequest;
+import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.User;
 import com.example.swd392.service.UserService;
@@ -59,5 +61,8 @@ public class AdminController {
         return "PUT:: admin controller";
     }
 
-
+    @GetMapping("/getUsers")
+    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
+        return iUserService.searchUsers(req);
+    }
 }

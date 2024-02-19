@@ -2,12 +2,15 @@ package com.example.swd392.service;
 
 import com.example.swd392.Request.UserRequest.ChangeAvatarRequest;
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
+import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.CreateUserResponse;
+import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,4 +28,6 @@ public interface UserService {
     public UpdateUserResponse unbanUser(String email);
 
     public List<User> getCreator();
+
+    ResponseEntity<ResponseUser> searchUsers(SearchRequest req);
 }
