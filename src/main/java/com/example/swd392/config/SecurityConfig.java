@@ -39,6 +39,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authentication -> authentication
                         .requestMatchers("/api/v1/auth/**")
                         .permitAll()
+                        .requestMatchers("/api/v1/super_admin/**")
+                        .permitAll()
                         //Admin_controller role
                         .requestMatchers("/api/v1/admin/**").hasAnyRole(ADMIN.name())
                         .requestMatchers(GET, "/api/v1/admin/**").hasAnyAuthority(ADMIN_READ.name())
