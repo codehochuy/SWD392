@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/api/v1/**").hasAnyAuthority(CREATOR_CREATE.name(),AUDIENCE_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/**").hasAnyAuthority(CREATOR_UPDATE.name(),AUDIENCE_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(CREATOR_DELETE.name(),AUDIENCE_DELETE.name())
+                        .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(AUDIENCE_BUY_ARTWORK.name())
 
                         // Audience controller role
 
@@ -62,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_DELETE.name())
+                        .requestMatchers(DELETE, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_BUY_ARTWORK.name())
 
                         .anyRequest()
                         .authenticated())

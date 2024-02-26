@@ -25,14 +25,16 @@ public enum Role {
                     AUDIENCE_CREATE,
                     AUDIENCE_DELETE,
                     AUDIENCE_UPDATE,
-                    AUDIENCE_READ
+                    AUDIENCE_READ,
+                    AUDIENCE_BUY_ARTWORK
             )),
     AUDIENCE(
             Set.of(
                     AUDIENCE_CREATE,
                     AUDIENCE_DELETE,
                     AUDIENCE_UPDATE,
-                    AUDIENCE_READ
+                    AUDIENCE_READ,
+                    AUDIENCE_BUY_ARTWORK
             )),
     ADMIN(
             Set.of(

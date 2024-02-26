@@ -1,9 +1,12 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.CartRequest.AddToCartRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.CartResponse.CartResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.User;
+import com.example.swd392.service.CartService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,9 @@ public class AudienceController {
 
     @Autowired
     private UserService iUserService;
+
+    @Autowired
+    private CartService iCartService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -66,6 +72,13 @@ public class AudienceController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
     }
+
+    @PostMapping("/addToCart")
+    @PreAuthorize("hasAuthority('audience:buy')")
+    public CartResponse addToCart(@RequestBody AddToCartRequest request) {
+        return iCartService.addToCart(request);
+    }
+
 
 
 
