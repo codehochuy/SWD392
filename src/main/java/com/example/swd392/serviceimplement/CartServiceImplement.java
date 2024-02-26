@@ -54,4 +54,17 @@ public class CartServiceImplement implements CartService {
         }
 
     }
+
+    @Override
+    public CartResponse removeCart(int cartId) {
+        if(cartRepo.existsById(cartId)){
+            cartRepo.deleteById(cartId);
+            return  CartResponse.builder()
+                    .status("Item removed from cart successfully").build();
+        }else {
+            return  CartResponse.builder()
+                    .status("Item does not exist").build();
+        }
+
+    }
 }

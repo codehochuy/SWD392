@@ -79,6 +79,12 @@ public class AudienceController {
         return iCartService.addToCart(request);
     }
 
+    @DeleteMapping("/remove-from-cart/{cartId}")
+    @PreAuthorize("hasAnyAuthority('audience:delete')")
+    public CartResponse removeFromCart(@PathVariable int cartId) {
+        return iCartService.removeCart(cartId);
+    }
+
 
 
 

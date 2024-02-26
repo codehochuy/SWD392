@@ -8,4 +8,6 @@ import com.example.swd392.model.User;
 
 public interface CartService {
     public CartResponse addToCart(AddToCartRequest request);
+
+    public CartResponse removeCart(int cartId);
 }
