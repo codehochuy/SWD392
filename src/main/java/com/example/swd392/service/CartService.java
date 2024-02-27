@@ -6,8 +6,12 @@ import com.example.swd392.model.Artwork;
 import com.example.swd392.model.Cart;
 import com.example.swd392.model.User;
 
+import java.util.List;
+
 public interface CartService {
     public CartResponse addToCart(AddToCartRequest request);
 
     public CartResponse removeCart(int cartId);
+
+    List<Cart> viewCartByUserId(int userId);
 }

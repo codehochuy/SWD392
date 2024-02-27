@@ -5,6 +5,7 @@ import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.model.Cart;
 import com.example.swd392.model.User;
 import com.example.swd392.service.CartService;
 import com.example.swd392.service.UserService;
@@ -85,6 +86,18 @@ public class AudienceController {
         return iCartService.removeCart(cartId);
     }
 
+    @GetMapping("/view-cart/{userId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public Object viewCartByUserId(@PathVariable int userId) {
+        List<Cart> cartList = iCartService.viewCartByUserId(userId);
+        if (cartList != null) {
+            // Trả về danh sách mục trong giỏ hàng
+            return cartList;
+        } else {
+            // Trả về thông báo khi không tìm thấy người dùng
+            return "User not found";
+        }
+    }
 
 
 

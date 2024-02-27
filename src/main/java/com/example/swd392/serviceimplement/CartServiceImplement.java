@@ -13,6 +13,8 @@ import com.example.swd392.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartServiceImplement implements CartService {
 
@@ -66,5 +68,15 @@ public class CartServiceImplement implements CartService {
                     .status("Item does not exist").build();
         }
 
+    }
+
+    @Override
+    public List<Cart> viewCartByUserId(int userId) {
+        var user = userRepo.findUserByUsersID(userId).orElse(null);
+        if(user != null && (user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)) {
+            return cartRepo.findByUser(user);
+        }else {
+            return null;
+        }
     }
 }

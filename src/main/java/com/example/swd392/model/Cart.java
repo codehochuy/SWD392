@@ -1,5 +1,6 @@
 package com.example.swd392.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,10 +20,12 @@ public class Cart {
     private int cartId;
 
     @ManyToOne
+//    @JsonIgnore
     @JoinColumn(name = "ArtworkID")
     private Artwork artwork;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "UsersID")
     private User user;
 }
