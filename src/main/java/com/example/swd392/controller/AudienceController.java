@@ -1,9 +1,13 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.CartRequest.AddToCartRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.CartResponse.CartResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.model.Cart;
 import com.example.swd392.model.User;
+import com.example.swd392.service.CartService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +27,9 @@ public class AudienceController {
 
     @Autowired
     private UserService iUserService;
+
+    @Autowired
+    private CartService iCartService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -65,6 +72,31 @@ public class AudienceController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
+    }
+
+    @PostMapping("/addToCart")
+    @PreAuthorize("hasAuthority('audience:buy')")
+    public CartResponse addToCart(@RequestBody AddToCartRequest request) {
+        return iCartService.addToCart(request);
+    }
+
+    @DeleteMapping("/remove-from-cart/{cartId}")
+    @PreAuthorize("hasAnyAuthority('audience:delete')")
+    public CartResponse removeFromCart(@PathVariable int cartId) {
+        return iCartService.removeCart(cartId);
+    }
+
+    @GetMapping("/view-cart/{userId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public Object viewCartByUserId(@PathVariable int userId) {
+        List<Cart> cartList = iCartService.viewCartByUserId(userId);
+        if (cartList != null) {
+            // Trả về danh sách mục trong giỏ hàng
+            return cartList;
+        } else {
+            // Trả về thông báo khi không tìm thấy người dùng
+            return "User not found";
+        }
     }
 
 

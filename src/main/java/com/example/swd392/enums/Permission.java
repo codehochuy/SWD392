@@ -16,6 +16,8 @@ public enum Permission {
     AUDIENCE_CREATE("audience:create"),
     AUDIENCE_DELETE("audience:delete"),
 
+    AUDIENCE_BUY_ARTWORK("audience:buy"),
+
    ADMIN_READ("admin:read"),
    ADMIN_UPDATE("admin:update"),
    ADMIN_CREATE("admin:create"),

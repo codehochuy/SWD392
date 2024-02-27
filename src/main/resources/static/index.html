@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notification Frontend</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/dist/stomp.min.js"></script>
+</head>
+<body>
+<h1>Notifications</h1>
+<ul id="notificationList"></ul>
+
+<script>
+    var stompClient = null;
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/notification', function (notification) {
+                showMessage(JSON.parse(notification.body));
+            });
+        });
+    }
+
+    function showMessage(message) {
+        $("#notificationList").append("<li>" + message.message + "</li>");
+    }
+
+    $(function () {
+        connect();
+    });
+</script>
+</body>
+</html>

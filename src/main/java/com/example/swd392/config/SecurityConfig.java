@@ -37,7 +37,19 @@ public class SecurityConfig {
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configure(http))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authentication -> authentication
-                        .requestMatchers("/api/v1/auth/**")
+                        .requestMatchers("/api/v1/auth/**",
+                                "/v2/api-docs",
+                                "/v3/api-docs",
+//                                "/v3/api-docs/**",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/webjars/**",
+                                "/swagger-ui.html")
+                        .permitAll()
+                        .requestMatchers("/api/v1/super_admin/**")
                         .permitAll()
                         //Admin_controller role
                         .requestMatchers("/api/v1/admin/**").hasAnyRole(ADMIN.name())
@@ -52,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/api/v1/**").hasAnyAuthority(CREATOR_CREATE.name(),AUDIENCE_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/**").hasAnyAuthority(CREATOR_UPDATE.name(),AUDIENCE_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(CREATOR_DELETE.name(),AUDIENCE_DELETE.name())
+                        .requestMatchers(DELETE, "/api/v1/**").hasAnyAuthority(AUDIENCE_BUY_ARTWORK.name())
 
                         // Audience controller role
 
@@ -60,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(POST, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_CREATE.name())
                         .requestMatchers(PUT, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_UPDATE.name())
                         .requestMatchers(DELETE, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_DELETE.name())
+                        .requestMatchers(DELETE, "/api/v1/user/**").hasAnyAuthority(AUDIENCE_BUY_ARTWORK.name())
 
                         .anyRequest()
                         .authenticated())
