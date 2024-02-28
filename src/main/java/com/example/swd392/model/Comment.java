@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "Comments")
@@ -24,7 +25,7 @@ public class Comment {
     private String commentText;
 
     @Column(name = "CommentedAt")
-    private LocalDateTime commentedAt;
+    private Date commentedAt;
 
     @ManyToOne
     @JoinColumn(name = "UserID")
