@@ -4,6 +4,9 @@ import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
 import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.model.Artwork;
+import com.example.swd392.model.Comment;
 import com.example.swd392.service.ArtworkService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/creator")
@@ -52,5 +57,24 @@ public class CreatorController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/find/{artworkId}")
+    public ResponseEntity<ResponseObject> findArtworkId(@PathVariable Integer artworkId) {
+        return artworkService.findArtworkId(artworkId);
 
+    }
+
+    @GetMapping("/getallArtWork")
+    public ResponseEntity<List<Artwork>> getAllComments() {
+        List<Artwork> artworks = artworkService.getAllArtworks();
+        return ResponseEntity.ok(artworks);
+    }
+
+    @GetMapping("/artworks/search")
+    public ResponseEntity<?> searchArtworks(
+            @RequestParam(name = "artworkName", required = false) String artworkName,
+            @RequestParam(name = "price", required = false) double price
+    ) {
+        List<Artwork> artworkList = artworkService.findArtworksByFilter(artworkName, price);
+        return ResponseEntity.ok(artworkList);
+    }
 }

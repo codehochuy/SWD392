@@ -4,14 +4,17 @@ import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
 import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Util.ImageUtil;
 import com.example.swd392.enums.Role;
 import com.example.swd392.model.Artwork;
+import com.example.swd392.model.Comment;
 import com.example.swd392.model.User;
 import com.example.swd392.repository.ArtworkRepo;
 import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.ArtworkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -121,5 +124,26 @@ public class ArtworkServiceImplement implements ArtworkService {
         }
     }
 
+    @Override
+    public ResponseEntity<ResponseObject> findArtworkId(Integer artworkId) {
+        try {
+            Artwork artwork = artworkRepo.findById(artworkId).orElse(null);
+            if (artwork == null) {
+                // Xử lý trường hợp không tìm thấy blog
+            }
+            return ResponseEntity.ok(new ResponseObject("Success", "Find blog success", artwork));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
+        }
+    }
+    @Override
+    public List<Artwork> getAllArtworks() {
+        return artworkRepo.findAll();
+    }
+
+    @Override
+    public List<Artwork> findArtworksByFilter(String artworkName,  double price) {
+        return artworkRepo.findArtworksByFilter(artworkName, price);
+    }
 
 }
