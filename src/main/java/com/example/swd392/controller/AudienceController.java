@@ -110,6 +110,13 @@ public class AudienceController {
         return iUserService.findAllUsers();
     }
 
+    @GetMapping("/searchUser")
+    public ResponseEntity<?> searchUser(
+            @RequestParam(name = "searchValue", required = false) String searchValue,
+            @RequestParam(name = "phone", required = false) String phone) {
 
+        List<User> userList = iUserService.searchUser(searchValue, phone);
+        return ResponseEntity.ok(userList);
+    }
 
 }
