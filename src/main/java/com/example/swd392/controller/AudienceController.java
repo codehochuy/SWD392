@@ -3,6 +3,7 @@ package com.example.swd392.controller;
 import com.example.swd392.Request.CartRequest.AddToCartRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
@@ -97,6 +98,16 @@ public class AudienceController {
             // Trả về thông báo khi không tìm thấy người dùng
             return "User not found";
         }
+    }
+
+    @GetMapping("/findUser/{userId}")
+    public ResponseEntity<ResponseObject> findUserById(@PathVariable int userId) {
+        return iUserService.findUserById(userId);
+    }
+
+    @GetMapping("/getAllUsers")
+    private ResponseEntity<ResponseObject> getAllUsers() {
+        return iUserService.findAllUsers();
     }
 
 

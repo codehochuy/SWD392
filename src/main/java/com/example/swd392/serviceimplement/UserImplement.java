@@ -3,6 +3,7 @@ package com.example.swd392.serviceimplement;
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.ResponseUser;
@@ -66,6 +67,35 @@ public class UserImplement implements UserService {
         }
     }
 
+    @Override
+    public ResponseEntity<ResponseObject> findAllCreator() {
+        var CreatorsAll = userRepo.findAll();
+        return ResponseEntity.ok().body(new ResponseObject("Success","List Creators",CreatorsAll));
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> findUserById(int userId) {
+        try {
+            User User = userRepo.findById(userId).orElse(null);
+            if (User == null) {
+                // Xử lý trường hợp không tìm thấy blog
+            }
+            return ResponseEntity.ok(new ResponseObject("Success", "Find blog success", User));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
+        }
+    }
+
+    @Override
+    public ResponseEntity<ResponseObject> findAllUsers() {
+        var UserAll = userRepo.findAll();
+        return ResponseEntity.ok().body(new ResponseObject("Success","List blog",UserAll));
+    }
+
+    @Override
+    public List<User> searchUser(String searchValue, String phone) {
+        return userRepo.findUsersByFilter(searchValue, phone);
+    }
 
 
     @Override

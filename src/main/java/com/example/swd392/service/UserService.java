@@ -4,6 +4,7 @@ import com.example.swd392.Request.UserRequest.ChangeAvatarRequest;
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.ResponseUser;
@@ -30,4 +31,13 @@ public interface UserService {
     public List<User> getCreator();
 
     ResponseEntity<ResponseUser> searchUsers(SearchRequest req);
+
+
+    ResponseEntity<ResponseObject> findAllCreator();
+
+    ResponseEntity<ResponseObject> findUserById(int userId);
+
+    ResponseEntity<ResponseObject> findAllUsers();
+
+    List<User> searchUser(String searchValue, String phone);
 }

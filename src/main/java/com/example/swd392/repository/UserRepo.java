@@ -4,6 +4,7 @@ import com.example.swd392.enums.Role;
 import com.example.swd392.model.User;
 import com.example.swd392.service.UserService;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,9 @@ UserRepo extends JpaRepository<User,Integer> {
     Optional<User> findUserByUsersID(int userid);
 
     Optional<User> findByUsersID(Integer userid);
+
+    @Query("SELECT u FROM User u WHERE " +
+            "(:searchValue IS NULL OR LOWER(u.accountName) LIKE %:searchValue% OR LOWER(u.email) LIKE %:searchValue%) AND " +
+            "(:phone IS NULL OR u.phone = :phone)")
+    List<User> findUsersByFilter(String searchValue, String phone);
 }

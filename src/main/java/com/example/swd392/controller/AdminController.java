@@ -1,6 +1,7 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.UserRequest.SearchRequest;
+import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.User;
@@ -64,5 +65,10 @@ public class AdminController {
     @GetMapping("/getUsers")
     public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
         return iUserService.searchUsers(req);
+    }
+
+    @GetMapping("/findCreatorById")
+    public ResponseEntity<ResponseObject> getUserById(){
+        return iUserService.findAllCreator();
     }
 }
