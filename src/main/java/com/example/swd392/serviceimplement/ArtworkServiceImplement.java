@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class ArtworkServiceImplement implements ArtworkService {
@@ -31,8 +33,10 @@ public class ArtworkServiceImplement implements ArtworkService {
     private UserRepo userRepo;
 
     @Override
-    public List<Artwork> getListArtworkForGuest() {
-        return artworkRepo.findAll();
+    public List<Artwork> getListArtworkForGuest(int count) {
+        List<Artwork> allArtworks = artworkRepo.findAll();
+        Collections.shuffle(allArtworks, new Random(System.currentTimeMillis()));
+        return allArtworks.subList(0, Math.min(count, allArtworks.size()));
     }
 
     @Override
