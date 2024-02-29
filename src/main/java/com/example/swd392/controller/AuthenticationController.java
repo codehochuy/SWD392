@@ -76,8 +76,8 @@ public class AuthenticationController {
 
                 user.setPassword(passwordEncoder.encode(pass));
                 user = userService.saveUserForMail(user);
-//                emailService.sendSimpleMessage(email,"Reset password","New password is : " + pass);
-                emailService.sendSimpleMessage(email,"WARNING","EMAIL Của Bạn Phát Hiện Xâm Nhập Lạ : " );
+                emailService.sendSimpleMessage(email,"Reset password","New password is : " + pass);
+//                emailService.sendSimpleMessage(email,"WARNING","EMAIL Của Bạn Phát Hiện Xâm Nhập Lạ : " );
                 return ResponseEntity.ok(user);
             }
         } catch (Exception e) {

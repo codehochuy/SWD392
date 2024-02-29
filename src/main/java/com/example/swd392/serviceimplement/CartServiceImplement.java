@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartServiceImplement implements CartService {
@@ -40,14 +41,22 @@ public class CartServiceImplement implements CartService {
                     .build();
         }
         else if(user != null && (user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)){
-            Cart cart = new Cart();
-            cart.setUser(user);
-            cart.setArtwork(artWork);
-            cartRepo.save(cart);
+            Optional<Cart> existingCart = cartRepo.findByUserAndArtwork(user, artWork);
+            if (existingCart.isPresent()) {
+                return CartResponse.builder()
+                        .status("This artwork is already in the cart.")
+                        .build();
+            } else {
+                // Nếu chưa tồn tại, thêm vào giỏ hàng
+                Cart cart = new Cart();
+                cart.setUser(user);
+                cart.setArtwork(artWork);
+                cartRepo.save(cart);
 
-            return CartResponse.builder()
-                    .status("Add to cart successfully")
-                    .build();
+                return CartResponse.builder()
+                        .status("Add to cart successfully")
+                        .build();
+            }
 
         }else {
             return CartResponse.builder()
