@@ -97,6 +97,16 @@ public class UserImplement implements UserService {
         return userRepo.findUsersByFilter(searchValue, phone);
     }
 
+    @Override
+    public User findByEmailForMail(String email) {
+        return userRepo.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User saveUserForMail(User user) {
+        return userRepo.save(user);
+    }
+
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {

@@ -40,4 +40,8 @@ public interface UserService {
     ResponseEntity<ResponseObject> findAllUsers();
 
     List<User> searchUser(String searchValue, String phone);
+
+    User findByEmailForMail(String email);
+
+    User saveUserForMail(User user);
 }
