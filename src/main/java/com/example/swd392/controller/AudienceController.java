@@ -10,6 +10,7 @@ import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
+import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
 import com.example.swd392.service.CartService;
 import com.example.swd392.service.FollowerService;
@@ -134,9 +135,9 @@ public class AudienceController {
 
 
     @PutMapping("/update/{followerId}")
-    public ResponseEntity<UpdateFollowerResponse> updateFollower(
+    public ResponseEntity<CreateFollowerResponse> updateFollower(
             @PathVariable int followerId,
-            @RequestBody UpdateFollowerRequest followerRequest) {
+            @RequestBody CreateFollowerRequest followerRequest) {
         return followerService.updateFollower(followerId, followerRequest);
     }
 
@@ -153,6 +154,15 @@ public class AudienceController {
     @GetMapping("/all")
     public ResponseEntity<ListFollowerResponse> findAllFollowers() {
         return followerService.findAllFollowers();
+    }
+
+    @GetMapping("/followers/search")
+    public ResponseEntity<?> searchFollowers(
+            @RequestParam(name = "userId", required = false) Integer userId,
+            @RequestParam(name = "accountName", required = false) String accountName
+    ) {
+        List<Follower> followerList = followerService.searchFollowers(userId, accountName);
+        return ResponseEntity.ok(followerList);
     }
 
 }

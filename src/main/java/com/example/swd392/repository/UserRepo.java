@@ -26,4 +26,7 @@ UserRepo extends JpaRepository<User,Integer> {
             "(:searchValue IS NULL OR LOWER(u.accountName) LIKE %:searchValue% OR LOWER(u.email) LIKE %:searchValue%) AND " +
             "(:phone IS NULL OR u.phone = :phone)")
     List<User> findUsersByFilter(String searchValue, String phone);
+
+
+
 }

@@ -64,34 +64,49 @@ public class FollowerServiceImpl implements FollowerService {
 
 
 
+
+
     @Override
-    public ResponseEntity<UpdateFollowerResponse> updateFollower(int followerId, UpdateFollowerRequest followerRequest) {
+    public ResponseEntity<CreateFollowerResponse> updateFollower(int followerId, CreateFollowerRequest followerRequest) {
         try {
+            // Tìm kiếm Follower dựa trên followerId
             Follower existingFollower = followerRepository.findById(followerId).orElse(null);
             if (existingFollower == null) {
-                return ResponseEntity.badRequest().body(new UpdateFollowerResponse("Fail", "Follower not found", null));
+                // Xử lý trường hợp không tìm thấy Follower
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "Follower not found", null));
             }
 
-            // Lấy thông tin người dùng từ followerRequest
+            // Kiểm tra các trường cần thiết trong request
+            if (followerRequest.getUserId() == 0 || followerRequest.getFollowerUserId() == 0) {
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User id and follower user id are required", null));
+            }
+
+            // Lấy thông tin người dùng từ userId và followerUserId
             User user = userRepository.findById(followerRequest.getUserId()).orElse(null);
             User followerUser = userRepository.findById(followerRequest.getFollowerUserId()).orElse(null);
             if (user == null || followerUser == null) {
-                return ResponseEntity.badRequest().body(new UpdateFollowerResponse("Fail", "User or follower user not found", null));
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User or follower user not found", null));
             }
 
-            // Cập nhật thông tin follower
+            // Kiểm tra xem đã tồn tại một mục theo dõi giống hệt nhau trong cơ sở dữ liệu hay không
+            if (followerRepository.existsByUserAndFollowerUser(user, followerUser)) {
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User already follows follower user", null));
+            }
+
+            // Cập nhật thông tin cho Follower
             existingFollower.setUser(user);
             existingFollower.setFollowerUser(followerUser);
 
-            // Lưu thay đổi vào cơ sở dữ liệu
+            // Lưu Follower đã cập nhật vào cơ sở dữ liệu
             Follower updatedFollower = followerRepository.save(existingFollower);
 
             // Tạo response
-            return ResponseEntity.ok(new UpdateFollowerResponse("Success", "Update follower success", updatedFollower));
+            return ResponseEntity.ok(new CreateFollowerResponse("Success", "Update follower success", updatedFollower));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new UpdateFollowerResponse("Fail", "Internal Server Error", null));
+            return ResponseEntity.status(500).body(new CreateFollowerResponse("Fail", "Internal Server Error", null));
         }
     }
+
 
     @Override
     public ResponseEntity<DeleteFollowerResponse> deleteFollower(int followerId) {
@@ -136,5 +151,9 @@ public class FollowerServiceImpl implements FollowerService {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ListFollowerResponse("Fail", "Internal Server Error", null));
         }
+    }
+
+    public List<Follower> searchFollowers(Integer userId, String accountName) {
+        return followerRepository.findFollowersByFilter(userId, accountName);
     }
 }
