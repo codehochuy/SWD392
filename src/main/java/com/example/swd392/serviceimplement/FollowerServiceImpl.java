@@ -35,6 +35,11 @@ public class FollowerServiceImpl implements FollowerService {
                 return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User id and follower user id are required", null));
             }
 
+            // Kiểm tra xem userId có trùng với followerUserId không
+            if (followerRequest.getUserId() == followerRequest.getFollowerUserId()) {
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User id cannot be the same as follower user id", null));
+            }
+
             // Lấy thông tin người dùng từ userId
             User user = userRepository.findById(followerRequest.getUserId()).orElse(null);
             User followerUser = userRepository.findById(followerRequest.getFollowerUserId()).orElse(null);
@@ -66,6 +71,7 @@ public class FollowerServiceImpl implements FollowerService {
 
 
 
+
     @Override
     public ResponseEntity<CreateFollowerResponse> updateFollower(int followerId, CreateFollowerRequest followerRequest) {
         try {
@@ -79,6 +85,11 @@ public class FollowerServiceImpl implements FollowerService {
             // Kiểm tra các trường cần thiết trong request
             if (followerRequest.getUserId() == 0 || followerRequest.getFollowerUserId() == 0) {
                 return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User id and follower user id are required", null));
+            }
+
+            // Kiểm tra xem userId có trùng với followerUserId không
+            if (followerRequest.getUserId() == followerRequest.getFollowerUserId()) {
+                return ResponseEntity.badRequest().body(new CreateFollowerResponse("Fail", "User id cannot be the same as follower user id", null));
             }
 
             // Lấy thông tin người dùng từ userId và followerUserId
@@ -106,6 +117,7 @@ public class FollowerServiceImpl implements FollowerService {
             return ResponseEntity.status(500).body(new CreateFollowerResponse("Fail", "Internal Server Error", null));
         }
     }
+
 
 
     @Override
