@@ -1,14 +1,18 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.CartRequest.AddToCartRequest;
+import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
+import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
+import com.example.swd392.Response.FollowerResponse.*;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
 import com.example.swd392.model.User;
 import com.example.swd392.service.CartService;
+import com.example.swd392.service.FollowerService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +35,9 @@ public class AudienceController {
 
     @Autowired
     private CartService iCartService;
+
+    @Autowired
+    private  FollowerService followerService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -117,6 +124,35 @@ public class AudienceController {
 
         List<User> userList = iUserService.searchUser(searchValue, phone);
         return ResponseEntity.ok(userList);
+    }
+
+
+    @PostMapping("/createFollower")
+    public ResponseEntity<CreateFollowerResponse> createFollower(@RequestBody CreateFollowerRequest followerRequest) {
+        return followerService.createFollower(followerRequest);
+    }
+
+
+    @PutMapping("/update/{followerId}")
+    public ResponseEntity<UpdateFollowerResponse> updateFollower(
+            @PathVariable int followerId,
+            @RequestBody UpdateFollowerRequest followerRequest) {
+        return followerService.updateFollower(followerId, followerRequest);
+    }
+
+    @DeleteMapping("/delete/{followerId}")
+    public ResponseEntity<DeleteFollowerResponse> deleteFollower(@PathVariable int followerId) {
+        return followerService.deleteFollower(followerId);
+    }
+
+    @GetMapping("/find/{followerId}")
+    public ResponseEntity<FindFollowerResponse> findFollowerById(@PathVariable int followerId) {
+        return followerService.findFollowerById(followerId);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ListFollowerResponse> findAllFollowers() {
+        return followerService.findAllFollowers();
     }
 
 }
