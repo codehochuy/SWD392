@@ -1,14 +1,26 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.CartRequest.AddToCartRequest;
+import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
+import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
+import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
+import com.example.swd392.Request.LikeRequest.DeleteLikeRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
+import com.example.swd392.Response.FollowerResponse.*;
+import com.example.swd392.Response.LikeResponse.CreateLikeResponse;
+import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
+import com.example.swd392.Response.LikeResponse.FindLikeResponse;
+import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
+import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
 import com.example.swd392.service.CartService;
+import com.example.swd392.service.FollowerService;
+import com.example.swd392.service.LikeService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +43,12 @@ public class AudienceController {
 
     @Autowired
     private CartService iCartService;
+
+    @Autowired
+    private  FollowerService followerService;
+
+    @Autowired
+    private LikeService likeService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -117,6 +135,62 @@ public class AudienceController {
 
         List<User> userList = iUserService.searchUser(searchValue, phone);
         return ResponseEntity.ok(userList);
+    }
+
+
+    @PostMapping("/createFollower")
+    public ResponseEntity<CreateFollowerResponse> createFollower(@RequestBody CreateFollowerRequest followerRequest) {
+        return followerService.createFollower(followerRequest);
+    }
+
+
+    @PutMapping("/updateFollower/{followerId}")
+    public ResponseEntity<CreateFollowerResponse> updateFollower(
+            @PathVariable int followerId,
+            @RequestBody CreateFollowerRequest followerRequest) {
+        return followerService.updateFollower(followerId, followerRequest);
+    }
+
+    @DeleteMapping("/deleteFollower/{followerId}")
+    public ResponseEntity<DeleteFollowerResponse> deleteFollower(@PathVariable int followerId) {
+        return followerService.deleteFollower(followerId);
+    }
+
+    @GetMapping("/findFolower/{followerId}")
+    public ResponseEntity<FindFollowerResponse> findFollowerById(@PathVariable int followerId) {
+        return followerService.findFollowerById(followerId);
+    }
+
+    @GetMapping("/getallFollower")
+    public ResponseEntity<ListFollowerResponse> findAllFollowers() {
+        return followerService.findAllFollowers();
+    }
+
+    @GetMapping("/followers/searchFollower")
+    public ResponseEntity<?> searchFollowers(
+            @RequestParam(name = "userId", required = false) Integer userId,
+            @RequestParam(name = "accountName", required = false) String accountName
+    ) {
+        List<Follower> followerList = followerService.searchFollowers(userId, accountName);
+        return ResponseEntity.ok(followerList);
+    }
+    @PostMapping("/createLike")
+    public ResponseEntity<CreateLikeResponse> createLike(@RequestBody CreateLikeRequest likeRequest) {
+        return likeService.createLike(likeRequest);
+    }
+    @DeleteMapping("/deleteLike/{likeId}")
+    public ResponseEntity<DeleteLikeResponse> deleteLike(@PathVariable int likeId) {
+        return likeService.deleteLike(likeId);
+    }
+
+    @GetMapping("/findLikeById/{likeId}")
+    public ResponseEntity<FindLikeResponse> findLikeById(@PathVariable int likeId) {
+        return likeService.findLikeById(likeId);
+    }
+
+    @GetMapping("/getallLike")
+    public ResponseEntity<ListLikeResponse> findAllLikes() {
+        return likeService.findAllLikes();
     }
 
 }
