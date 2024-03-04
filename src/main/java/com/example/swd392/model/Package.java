@@ -1,10 +1,8 @@
 package com.example.swd392.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,23 +13,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 
+
 public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PackageUserID")
-    private int packageUserId;
+    @Column(name = "PackageID")
+    private int packageID;
 
-    @Column(name = "StartDate")
-    private LocalDateTime startDate;
+    @Column(name = "PackageName")
+    private String packageName;
 
-    @Column(name = "Enddate")
-    private LocalDateTime endDate;
+    @Column(name = "PackagePrice")
+    private double packagePrice;
 
-    @ManyToOne
-    @JoinColumn(name = "UserID")
-    private User user;
+    @Column(name = "PackageTime")
+    private int packageTime;
 
-    @ManyToOne
-    @JoinColumn(name = "PackageID")
-    private Package aPackage;
+
 }
