@@ -3,6 +3,7 @@ package com.example.swd392.serviceimplement;
 import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
 import com.example.swd392.Request.PreorderRequestRequest.UpdatePreorderRequestRequest;
 import com.example.swd392.Response.PreorderRequestResponse.*;
+import com.example.swd392.enums.Role;
 import com.example.swd392.model.PreorderRequest;
 import com.example.swd392.model.User;
 import com.example.swd392.repository.PreorderRequestRepository;
@@ -37,9 +38,6 @@ public class PreorderRequestServiceImpl implements PreorderRequestService {
                 return ResponseEntity.badRequest().body(new CreatePreorderRequestResponse("Fail", "Dữ liệu không hợp lệ", null));
             }
 
-            // Kiểm tra xem yêu cầu có tồn tại không
-
-
             // Tìm kiếm người tạo và người nghe
             Optional<User> creatorOptional = userRepository.findById(request.getCreatorId());
             Optional<User> audienceOptional = userRepository.findById(request.getAudienceId());
@@ -50,6 +48,11 @@ public class PreorderRequestServiceImpl implements PreorderRequestService {
 
             User creator = creatorOptional.get();
             User audience = audienceOptional.get();
+
+            // Kiểm tra vai trò của người tạo và người nghe
+            if (creator.getRole() != Role.CREATOR || audience.getRole() != Role.AUDIENCE) {
+                return ResponseEntity.badRequest().body(new CreatePreorderRequestResponse("Fail", "Vai trò người tạo hoặc người nghe không hợp lệ", null));
+            }
 
             // Tạo đối tượng PreorderRequest từ dữ liệu yêu cầu và lưu vào cơ sở dữ liệu
             PreorderRequest preorderRequest = new PreorderRequest();
@@ -84,7 +87,6 @@ public class PreorderRequestServiceImpl implements PreorderRequestService {
 
             // Kiểm tra xem có yêu cầu khác đã tồn tại với mô tả giống như yêu cầu mới không
 
-
             // Tìm kiếm người tạo và người nghe
             Optional<User> creatorOptional = userRepository.findById(request.getCreatorId());
             Optional<User> audienceOptional = userRepository.findById(request.getAudienceId());
@@ -95,6 +97,11 @@ public class PreorderRequestServiceImpl implements PreorderRequestService {
 
             User creator = creatorOptional.get();
             User audience = audienceOptional.get();
+
+            // Kiểm tra vai trò của người tạo và người nghe
+            if (creator.getRole() != Role.CREATOR || audience.getRole() != Role.AUDIENCE) {
+                return ResponseEntity.badRequest().body(new CreatePreorderRequestResponse("Fail", "Vai trò người tạo hoặc người nghe không hợp lệ", null));
+            }
 
             // Cập nhật thông tin yêu cầu
             existingPreorderRequest.setCreator(creator);

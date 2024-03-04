@@ -7,6 +7,7 @@ import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
 import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
 import com.example.swd392.Request.LikeRequest.DeleteLikeRequest;
 import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
+import com.example.swd392.Request.PreorderResponseRequest.CreatePreorderResponseRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
 import com.example.swd392.Response.FollowerResponse.*;
@@ -19,6 +20,7 @@ import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequest
 import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestResponse;
+import com.example.swd392.Response.PreorderResponseResponse.CreatePreorderResponseResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
@@ -57,9 +59,12 @@ public class AudienceController {
 
     @Autowired
     private PreorderRequestService preorderRequestService;
+    @Autowired
+    private  PreorderResponseService preorderResponseService;
 
     @Autowired
     private  CommentService commentService;
+
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -154,7 +159,7 @@ public class AudienceController {
 
     }
 
-    @PutMapping("/update/{commentId}")
+    @PutMapping("/updateComment/{commentId}")
     public ResponseEntity<ResponseObject> updateComment(
             @PathVariable Integer commentId,
             @RequestBody CreateCommentRequest createCommentRequest) {
@@ -162,19 +167,19 @@ public class AudienceController {
 
     }
 
-    @DeleteMapping("/delete/{commentId}")
+    @DeleteMapping("/deleteComment/{commentId}")
     public ResponseEntity<ResponseObject> deleteComment(@PathVariable Integer commentId) {
         return commentService.deleteComment(commentId);
 
     }
 
-    @GetMapping("/find/{commentId}")
+    @GetMapping("/findComment/{commentId}")
     public ResponseEntity<ResponseObject> findCommentById(@PathVariable Integer commentId) {
         return commentService.findCommentById(commentId);
 
     }
 
-    @GetMapping("/getall")
+    @GetMapping("/getallComment")
     public ResponseEntity<List<Comment>> getAllComments() {
         List<Comment> comments = commentService.getAllComments();
         return ResponseEntity.ok(comments);
@@ -278,5 +283,10 @@ public class AudienceController {
 //    ) {
 //        return ResponseEntity.ok(preorderRequestService.searchPreorderRequests(creatorId, audienceId));
 //    }
+
+    @PostMapping("/CreatePreorderResponseResponse")
+    public ResponseEntity<CreatePreorderResponseResponse> createPreorderResponse(@RequestBody CreatePreorderResponseRequest request) {
+        return preorderResponseService.createPreorderResponse(request);
+    }
 
 }
