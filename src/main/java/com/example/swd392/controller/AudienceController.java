@@ -1,15 +1,33 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.CartRequest.AddToCartRequest;
+import com.example.swd392.Request.CommentRequest.CreateCommentRequest;
+import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
+import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
+import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
+import com.example.swd392.Request.LikeRequest.DeleteLikeRequest;
+import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
+import com.example.swd392.Request.PreorderResponseRequest.CreatePreorderResponseRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
+import com.example.swd392.Response.FollowerResponse.*;
+import com.example.swd392.Response.LikeResponse.CreateLikeResponse;
+import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
+import com.example.swd392.Response.LikeResponse.FindLikeResponse;
+import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestResponse;
+import com.example.swd392.Response.PreorderResponseResponse.CreatePreorderResponseResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
+import com.example.swd392.model.Comment;
+import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
-import com.example.swd392.service.CartService;
-import com.example.swd392.service.UserService;
+import com.example.swd392.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -31,6 +50,21 @@ public class AudienceController {
 
     @Autowired
     private CartService iCartService;
+
+    @Autowired
+    private  FollowerService followerService;
+
+    @Autowired
+    private LikeService likeService;
+
+    @Autowired
+    private PreorderRequestService preorderRequestService;
+    @Autowired
+    private  PreorderResponseService preorderResponseService;
+
+    @Autowired
+    private  CommentService commentService;
+
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -117,6 +151,142 @@ public class AudienceController {
 
         List<User> userList = iUserService.searchUser(searchValue, phone);
         return ResponseEntity.ok(userList);
+    }
+
+    @PostMapping("/createComment")
+    public ResponseEntity<ResponseObject> createComment(@RequestBody CreateCommentRequest createCommentRequest) {
+        return commentService.createComment(createCommentRequest);
+
+    }
+
+    @PutMapping("/updateComment/{commentId}")
+    public ResponseEntity<ResponseObject> updateComment(
+            @PathVariable Integer commentId,
+            @RequestBody CreateCommentRequest createCommentRequest) {
+        return commentService.updateComment(commentId, createCommentRequest);
+
+    }
+
+    @DeleteMapping("/deleteComment/{commentId}")
+    public ResponseEntity<ResponseObject> deleteComment(@PathVariable Integer commentId) {
+        return commentService.deleteComment(commentId);
+
+    }
+
+    @GetMapping("/findComment/{commentId}")
+    public ResponseEntity<ResponseObject> findCommentById(@PathVariable Integer commentId) {
+        return commentService.findCommentById(commentId);
+
+    }
+
+    @GetMapping("/getallComment")
+    public ResponseEntity<List<Comment>> getAllComments() {
+        List<Comment> comments = commentService.getAllComments();
+        return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/comments/searchFilter")
+    public ResponseEntity<?> searchCommentsFilter(
+            @RequestParam(name = "commentText", required = false) String commentText,
+            @RequestParam(name = "commentedAt", required = false) Date commentedAt
+    ) {
+        List<Comment> commentList = commentService.searchCommentsFilter(commentText, commentedAt);
+        return ResponseEntity.ok(commentList);
+    }
+    @PostMapping("/createFollower")
+    public ResponseEntity<CreateFollowerResponse> createFollower(@RequestBody CreateFollowerRequest followerRequest) {
+        return followerService.createFollower(followerRequest);
+    }
+
+
+    @PutMapping("/updateFollower/{followerId}")
+    public ResponseEntity<CreateFollowerResponse> updateFollower(
+            @PathVariable int followerId,
+            @RequestBody CreateFollowerRequest followerRequest) {
+        return followerService.updateFollower(followerId, followerRequest);
+    }
+
+    @DeleteMapping("/deleteFollower/{followerId}")
+    public ResponseEntity<DeleteFollowerResponse> deleteFollower(@PathVariable int followerId) {
+        return followerService.deleteFollower(followerId);
+    }
+
+    @GetMapping("/findFolower/{followerId}")
+    public ResponseEntity<FindFollowerResponse> findFollowerById(@PathVariable int followerId) {
+        return followerService.findFollowerById(followerId);
+    }
+
+    @GetMapping("/getallFollower")
+    public ResponseEntity<ListFollowerResponse> findAllFollowers() {
+        return followerService.findAllFollowers();
+    }
+
+    @GetMapping("/followers/searchFollower")
+    public ResponseEntity<?> searchFollowers(
+            @RequestParam(name = "userId", required = false) Integer userId,
+            @RequestParam(name = "accountName", required = false) String accountName
+    ) {
+        List<Follower> followerList = followerService.searchFollowers(userId, accountName);
+        return ResponseEntity.ok(followerList);
+    }
+    @PostMapping("/createLike")
+    public ResponseEntity<CreateLikeResponse> createLike(@RequestBody CreateLikeRequest likeRequest) {
+        return likeService.createLike(likeRequest);
+    }
+    @DeleteMapping("/deleteLike/{likeId}")
+    public ResponseEntity<DeleteLikeResponse> deleteLike(@PathVariable int likeId) {
+        return likeService.deleteLike(likeId);
+    }
+
+    @GetMapping("/findLikeById/{likeId}")
+    public ResponseEntity<FindLikeResponse> findLikeById(@PathVariable int likeId) {
+        return likeService.findLikeById(likeId);
+    }
+
+    @GetMapping("/getallLike")
+    public ResponseEntity<ListLikeResponse> findAllLikes() {
+        return likeService.findAllLikes();
+    }
+
+
+    @PostMapping("/createCreatePreorderRequestResponse")
+    public ResponseEntity<CreatePreorderRequestResponse> createPreorderRequest(@RequestBody CreatePreorderRequestRequest request) {
+        return preorderRequestService.createPreorderRequest(request);
+    }
+
+    @PutMapping("/updateCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<CreatePreorderRequestResponse> updatePreorderRequest(
+            @PathVariable int preorderRequestId,
+            @RequestBody CreatePreorderRequestRequest request) {
+        return preorderRequestService.updatePreorderRequest(preorderRequestId, request);
+    }
+
+    @DeleteMapping("/deleteCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<DeletePreorderRequestResponse> deletePreorderRequest(@PathVariable int preorderRequestId) {
+        return preorderRequestService.deletePreorderRequest(preorderRequestId);
+    }
+
+    @GetMapping("/findCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<FindPreorderRequestResponse> findPreorderRequestById(@PathVariable int preorderRequestId) {
+        return preorderRequestService.findPreorderRequestById(preorderRequestId);
+    }
+
+    @GetMapping("CreatePreorderRequestResponse/list")
+    public ResponseEntity<ListPreorderRequestResponse> findAllPreorderRequests() {
+        return preorderRequestService.findAllPreorderRequests();
+    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<?> searchPreorderRequests(
+//            @RequestParam(name = "creatorId", required = false) Integer creatorId,
+//            @RequestParam(name = "audienceId", required = false) Integer audienceId
+//    ) {
+//        return ResponseEntity.ok(preorderRequestService.searchPreorderRequests(creatorId, audienceId));
+//    }
+
+    @PostMapping("/CreatePreorderResponseResponse")
+    public ResponseEntity<CreatePreorderResponseResponse> createPreorderResponse(@RequestBody CreatePreorderResponseRequest request) {
+        return preorderResponseService.createPreorderResponse(request);
     }
 
 }

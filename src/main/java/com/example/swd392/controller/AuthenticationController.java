@@ -8,19 +8,28 @@ import com.example.swd392.auth.AuthenticationResponse;
 import com.example.swd392.auth.AuthenticationService;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.config.LogoutService;
+import com.example.swd392.model.Artwork;
 import com.example.swd392.model.User;
+import com.example.swd392.service.ArtworkService;
 import com.example.swd392.service.EmailService;
 import com.example.swd392.service.UserService;
+import com.sun.nio.sctp.NotificationHandler;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.WebSocketSession;
+
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -32,6 +41,7 @@ public class AuthenticationController {
     private final UserService userService;
     private  final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private  final ArtworkService artworkService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -76,8 +86,8 @@ public class AuthenticationController {
 
                 user.setPassword(passwordEncoder.encode(pass));
                 user = userService.saveUserForMail(user);
-//                emailService.sendSimpleMessage(email,"Reset password","New password is : " + pass);
-                emailService.sendSimpleMessage(email,"WARNING","EMAIL Của Bạn Phát Hiện Xâm Nhập Lạ : " );
+                emailService.sendSimpleMessage(email,"Reset password","New password is : " + pass);
+//                emailService.sendSimpleMessage(email,"WARNING","EMAIL Của Bạn Phát Hiện Xâm Nhập Lạ : " );
                 return ResponseEntity.ok(user);
             }
         } catch (Exception e) {
@@ -89,5 +99,10 @@ public class AuthenticationController {
         }
 
 
+    }
+    @GetMapping("/random")
+    public List<Artwork> getRandomArtworks() {
+        int count = 10; // Set the count of artworks you want to fetch
+        return artworkService.getListArtworkForGuest(count);
     }
 }

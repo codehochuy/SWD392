@@ -25,7 +25,7 @@ public class Cart {
     private Artwork artwork;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "UsersID")
     private User user;
 }

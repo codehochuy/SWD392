@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ArtworkService {
-    public List<Artwork> getListArtworkForGuest();
+    public List<Artwork> getListArtworkForGuest(int count);
     public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException;
 
     DeleteArtworkResponse deleteArtwork(int artworkId);
