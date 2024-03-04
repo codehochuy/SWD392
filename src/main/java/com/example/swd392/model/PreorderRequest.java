@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "PreorderRequest")
@@ -32,5 +33,5 @@ public class PreorderRequest {
     private String description;
 
     @Column(name = "OrderPlacedAt", nullable = false)
-    private LocalDateTime orderPlacedAt;
+    private Date orderPlacedAt;
 }
