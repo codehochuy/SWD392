@@ -1,10 +1,14 @@
 package com.example.swd392.controller;
 
+import com.example.swd392.Request.PackageRequest.CreatePackageRequest;
+import com.example.swd392.Request.PackageRequest.UpdatePackageRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.model.Package;
 import com.example.swd392.model.User;
+import com.example.swd392.service.PackageService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import com.example.swd392.Response.PackageResponse.PackageResponse;
 
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -21,6 +30,9 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private UserService iUserService;
+    @Autowired
+    private PackageService ipackageService;
+
     @PutMapping("/ban/{email}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<UpdateUserResponse> banUser(@PathVariable String email) {
@@ -42,20 +54,24 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
     @GetMapping("/creators")
     public List<User> getCreators() {
         return iUserService.getCreator();
     }
+
     @GetMapping
     @PreAuthorize("hasAuthority('admin:read')")
     public String get() {
         return "GET:: admin controller";
     }
+
     @PostMapping
     @PreAuthorize("hasAuthority('admin:create')")
     public String post() {
         return "POST:: admin controller";
     }
+
     @PutMapping
     @PreAuthorize("hasAuthority('admin:update')")
     public String put() {
@@ -63,14 +79,40 @@ public class AdminController {
     }
 
     @GetMapping("/getUsers")
-    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req){
+    public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req) {
         return iUserService.searchUsers(req);
     }
 
     @GetMapping("/findCreatorById")
-    public ResponseEntity<ResponseObject> getUserById(){
+    public ResponseEntity<ResponseObject> getUserById() {
         return iUserService.findAllCreator();
     }
 
+    @GetMapping("/getAllPackages")
+    public ResponseEntity<PackageResponse> getAllPackages() {
+        return ipackageService.getAll();
+    }
+
+    @PostMapping("/createPackage")
+    public ResponseEntity<PackageResponse> createPackage(@RequestBody CreatePackageRequest request) {
+        return ipackageService.createPackage(request);
+    }
+
+    @DeleteMapping("/deletePackage/{packageId}")
+    public ResponseEntity<PackageResponse> deletePackage(@PathVariable int packageId) {
+        return ipackageService.deletePackage(packageId);
+    }
+
+    @PutMapping("/updatePackage/{packageId}")
+    public ResponseEntity<PackageResponse> updatePackage(@PathVariable int packageId, @RequestBody UpdatePackageRequest request) {
+        return ipackageService.update(packageId, request);
+    }
+
+
 
 }
+
+
+
+
+
