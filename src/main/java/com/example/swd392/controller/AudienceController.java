@@ -1,6 +1,7 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.CartRequest.AddToCartRequest;
+import com.example.swd392.Request.CommentRequest.CreateCommentRequest;
 import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
 import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
 import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
@@ -21,6 +22,7 @@ import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestRe
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
+import com.example.swd392.model.Comment;
 import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
 import com.example.swd392.service.*;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -54,6 +57,9 @@ public class AudienceController {
 
     @Autowired
     private PreorderRequestService preorderRequestService;
+
+    @Autowired
+    private  CommentService commentService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -142,7 +148,46 @@ public class AudienceController {
         return ResponseEntity.ok(userList);
     }
 
+    @PostMapping("/createComment")
+    public ResponseEntity<ResponseObject> createComment(@RequestBody CreateCommentRequest createCommentRequest) {
+        return commentService.createComment(createCommentRequest);
 
+    }
+
+    @PutMapping("/update/{commentId}")
+    public ResponseEntity<ResponseObject> updateComment(
+            @PathVariable Integer commentId,
+            @RequestBody CreateCommentRequest createCommentRequest) {
+        return commentService.updateComment(commentId, createCommentRequest);
+
+    }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<ResponseObject> deleteComment(@PathVariable Integer commentId) {
+        return commentService.deleteComment(commentId);
+
+    }
+
+    @GetMapping("/find/{commentId}")
+    public ResponseEntity<ResponseObject> findCommentById(@PathVariable Integer commentId) {
+        return commentService.findCommentById(commentId);
+
+    }
+
+    @GetMapping("/getall")
+    public ResponseEntity<List<Comment>> getAllComments() {
+        List<Comment> comments = commentService.getAllComments();
+        return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/comments/searchFilter")
+    public ResponseEntity<?> searchCommentsFilter(
+            @RequestParam(name = "commentText", required = false) String commentText,
+            @RequestParam(name = "commentedAt", required = false) Date commentedAt
+    ) {
+        List<Comment> commentList = commentService.searchCommentsFilter(commentText, commentedAt);
+        return ResponseEntity.ok(commentList);
+    }
     @PostMapping("/createFollower")
     public ResponseEntity<CreateFollowerResponse> createFollower(@RequestBody CreateFollowerRequest followerRequest) {
         return followerService.createFollower(followerRequest);
