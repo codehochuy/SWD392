@@ -6,6 +6,7 @@ import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
 import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
 import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
 import com.example.swd392.Request.LikeRequest.DeleteLikeRequest;
+import com.example.swd392.Request.PackageUser.createPackageUserRequest;
 import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
 import com.example.swd392.Request.PreorderResponseRequest.CreatePreorderResponseRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
@@ -16,6 +17,8 @@ import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
 import com.example.swd392.Response.LikeResponse.FindLikeResponse;
 import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.PackageUserResponse.CreatePackageUserResponse;
+import com.example.swd392.Response.PackageUserResponse.createPackageUserResponse;
 import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
@@ -64,7 +67,8 @@ public class AudienceController {
 
     @Autowired
     private  CommentService commentService;
-
+    @Autowired
+    private  PackageUserService packageUserService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -288,5 +292,9 @@ public class AudienceController {
     public ResponseEntity<CreatePreorderResponseResponse> createPreorderResponse(@RequestBody CreatePreorderResponseRequest request) {
         return preorderResponseService.createPreorderResponse(request);
     }
+    @PostMapping("/CreatePakageUser")
+    public ResponseEntity<CreatePackageUserResponse> createPackageUser(@RequestBody createPackageUserRequest request) {
+        return packageUserService.createPackageUser(request);
 
+    }
 }
