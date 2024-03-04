@@ -5,6 +5,7 @@ import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
 import com.example.swd392.Request.FollowerRequest.UpdateFollowerRequest;
 import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
 import com.example.swd392.Request.LikeRequest.DeleteLikeRequest;
+import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.CartResponse.CartResponse;
 import com.example.swd392.Response.FollowerResponse.*;
@@ -13,15 +14,16 @@ import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
 import com.example.swd392.Response.LikeResponse.FindLikeResponse;
 import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
+import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Cart;
 import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
-import com.example.swd392.service.CartService;
-import com.example.swd392.service.FollowerService;
-import com.example.swd392.service.LikeService;
-import com.example.swd392.service.UserService;
+import com.example.swd392.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,6 +51,9 @@ public class AudienceController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private PreorderRequestService preorderRequestService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -192,5 +197,41 @@ public class AudienceController {
     public ResponseEntity<ListLikeResponse> findAllLikes() {
         return likeService.findAllLikes();
     }
+
+
+    @PostMapping("/createCreatePreorderRequestResponse")
+    public ResponseEntity<CreatePreorderRequestResponse> createPreorderRequest(@RequestBody CreatePreorderRequestRequest request) {
+        return preorderRequestService.createPreorderRequest(request);
+    }
+
+    @PutMapping("/updateCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<CreatePreorderRequestResponse> updatePreorderRequest(
+            @PathVariable int preorderRequestId,
+            @RequestBody CreatePreorderRequestRequest request) {
+        return preorderRequestService.updatePreorderRequest(preorderRequestId, request);
+    }
+
+    @DeleteMapping("/deleteCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<DeletePreorderRequestResponse> deletePreorderRequest(@PathVariable int preorderRequestId) {
+        return preorderRequestService.deletePreorderRequest(preorderRequestId);
+    }
+
+    @GetMapping("/findCreatePreorderRequestResponse/{preorderRequestId}")
+    public ResponseEntity<FindPreorderRequestResponse> findPreorderRequestById(@PathVariable int preorderRequestId) {
+        return preorderRequestService.findPreorderRequestById(preorderRequestId);
+    }
+
+    @GetMapping("CreatePreorderRequestResponse/list")
+    public ResponseEntity<ListPreorderRequestResponse> findAllPreorderRequests() {
+        return preorderRequestService.findAllPreorderRequests();
+    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<?> searchPreorderRequests(
+//            @RequestParam(name = "creatorId", required = false) Integer creatorId,
+//            @RequestParam(name = "audienceId", required = false) Integer audienceId
+//    ) {
+//        return ResponseEntity.ok(preorderRequestService.searchPreorderRequests(creatorId, audienceId));
+//    }
 
 }

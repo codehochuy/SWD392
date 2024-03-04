@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "PreorderResponse")
@@ -31,5 +32,5 @@ public class PreorderResponse {
     private String description;
 
     @Column(name = "TimeResponse", nullable = false)
-    private LocalDateTime timeResponse;
+    private Date timeResponse;
 }
