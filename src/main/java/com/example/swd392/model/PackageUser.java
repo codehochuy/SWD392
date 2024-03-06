@@ -19,7 +19,7 @@ public class PackageUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PackageUserID")
-    private int packageUserId;
+    private Integer packageUserId;
 
     @Column(name = "StartDate")
     private LocalDateTime startDate;
