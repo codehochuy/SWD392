@@ -20,6 +20,8 @@ import com.example.swd392.repository.LikeRepository;
 import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -117,7 +119,21 @@ public class LikeServiceImpl implements LikeService {
         }
     }
 
+    @Override
+    public ResponseEntity<ListLikeResponse> findAllLikesPageNable(Pageable pageable) {
+        try {
+            Page<Like> likePage = likeRepository.findAll(pageable);
+            List<Like> likes = likePage.getContent();
 
+            if (likes.isEmpty()) {
+                return ResponseEntity.ok(new ListLikeResponse("Success", "List is empty", "listIsEmpty"));
+            }
+
+            return ResponseEntity.ok(new ListLikeResponse("Success", "List followers", likes));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ListLikeResponse("Fail", "Internal Server Error", null));
+        }
+    }
 
 
 }
