@@ -18,7 +18,7 @@ import com.example.swd392.Response.LikeResponse.FindLikeResponse;
 import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.PackageUserResponse.CreatePackageUserResponse;
-import com.example.swd392.Response.PackageUserResponse.createPackageUserResponse;
+
 import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
@@ -32,6 +32,9 @@ import com.example.swd392.model.Follower;
 import com.example.swd392.model.User;
 import com.example.swd392.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -67,8 +71,8 @@ public class AudienceController {
 
     @Autowired
     private  CommentService commentService;
-    @Autowired
-    private  PackageUserService packageUserService;
+//    @Autowired
+//    private  PackageUserService packageUserService;
 
     @GetMapping("/list")
 //    @PreAuthorize("hasAuthority('audience:read')")
@@ -252,6 +256,13 @@ public class AudienceController {
         return likeService.findAllLikes();
     }
 
+    @GetMapping("/getallLikePagenable")
+    public ResponseEntity<ListLikeResponse> findAllLikesPagenable(@RequestParam("page") Optional<Integer> page,
+                                                         @RequestParam("size") Optional<Integer> size) {
+        Pageable pageable = PageRequest.of(page.orElse(1) - 1, size.orElse(9));
+        return likeService.findAllLikesPageNable(pageable);
+    }
+
 
     @PostMapping("/createCreatePreorderRequestResponse")
     public ResponseEntity<CreatePreorderRequestResponse> createPreorderRequest(@RequestBody CreatePreorderRequestRequest request) {
@@ -292,9 +303,9 @@ public class AudienceController {
     public ResponseEntity<CreatePreorderResponseResponse> createPreorderResponse(@RequestBody CreatePreorderResponseRequest request) {
         return preorderResponseService.createPreorderResponse(request);
     }
-    @PostMapping("/CreatePakageUser")
-    public ResponseEntity<CreatePackageUserResponse> createPackageUser(@RequestBody createPackageUserRequest request) {
-        return packageUserService.createPackageUser(request);
-
-    }
+//    @PostMapping("/CreatePakageUser")
+//    public ResponseEntity<CreatePackageUserResponse> createPackageUser(@RequestBody createPackageUserRequest request) {
+//        return packageUserService.createPackageUser(request);
+//
+//    }
 }

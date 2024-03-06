@@ -6,6 +6,7 @@ import com.example.swd392.Response.LikeResponse.CreateLikeResponse;
 import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
 import com.example.swd392.Response.LikeResponse.FindLikeResponse;
 import com.example.swd392.Response.LikeResponse.ListLikeResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface LikeService {
@@ -17,4 +18,7 @@ public interface LikeService {
     ResponseEntity<FindLikeResponse> findLikeById(int likeId);
 
     ResponseEntity<ListLikeResponse> findAllLikes();
+
+
+    ResponseEntity<ListLikeResponse> findAllLikesPageNable(Pageable pageable);
 }
