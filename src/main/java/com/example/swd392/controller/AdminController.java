@@ -60,23 +60,23 @@ public class AdminController {
         return iUserService.getCreator();
     }
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('admin:read')")
-    public String get() {
-        return "GET:: admin controller";
-    }
-
-    @PostMapping
-    @PreAuthorize("hasAuthority('admin:create')")
-    public String post() {
-        return "POST:: admin controller";
-    }
-
-    @PutMapping
-    @PreAuthorize("hasAuthority('admin:update')")
-    public String put() {
-        return "PUT:: admin controller";
-    }
+//    @GetMapping
+//    @PreAuthorize("hasAuthority('admin:read')")
+//    public String get() {
+//        return "GET:: admin controller";
+//    }
+//
+//    @PostMapping
+//    @PreAuthorize("hasAuthority('admin:create')")
+//    public String post() {
+//        return "POST:: admin controller";
+//    }
+//
+//    @PutMapping
+//    @PreAuthorize("hasAuthority('admin:update')")
+//    public String put() {
+//        return "PUT:: admin controller";
+//    }
 
     @GetMapping("/getUsers")
     public ResponseEntity<ResponseUser> getAllUsers(@RequestBody SearchRequest req) {

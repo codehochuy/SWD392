@@ -76,6 +76,8 @@ public class PackageUserServiceImpl implements PackageUserService {
 
             // Lưu packageUser vào cơ sở dữ liệu
             PackageUser savedPackageUser = packageRepository.save(packageUser);
+            user.setRole(Role.CREATOR);
+            userRepository.save(user);
 
             // Trả về phản hồi thành công
             return ResponseEntity.ok(new CreatePackageUserResponse("Success", "Tạo người dùng gói thành công", savedPackageUser));
