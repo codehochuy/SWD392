@@ -42,68 +42,68 @@ public class Swd392Application {
 			AuthenticationService service
 	){
 		return args -> {
-//			var super_admin= RegisterRequest.builder()
-//					.name("Super Admin")
-//					.email("Superadmin@gmail.com")
-////					.avatar("admin.jpg")
-//					.password("123")
-//					.phone("0326514968")
-//					.status(true)
-//					.role(SUPER_ADMIN)
-//					.build();
-//			System.out.println("Super_Admin token :"+ service.register(super_admin).getAccessToken());
-//
-//			var admin= RegisterRequest.builder()
-//					.name("Admin")
-//					.email("Admin@gmail.com")
-////					.avatar("admin.jpg")
-//					.password("123")
-//					.phone("0392272536")
-//					.status(true)
-//					.role(ADMIN)
-//					.build();
-//			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
-//
-//			var audience = RegisterRequest.builder()
-//					.name("David")
-//					.email("david@gmail.com")
-////					.avatar("huy.jpg")
-//					.status(true)
-//					.password("123")
-//					.phone("0854512367")
-//					.role(AUDIENCE)
-//					.build();
-//			System.out.println("Audience token :"+ service.register(audience).getAccessToken());
-//			var creator = RegisterRequest.builder()
-//					.name("John")
-//					.email("huypt160548@fpt.edu.vn")
-////					.avatar("huy.jpg")
-//					.status(true)
-//					.password("123")
-//					.phone("0326514875")
-//					.role(CREATOR)
-//					.build();
-//			System.out.println("Creator token :"+ service.register(creator).getAccessToken());
-//
-//			var guest = RegisterRequest.builder()
-//					.name("Trần Huy")
-//					.email("huypt110402@gmail.com")
-////					.avatar("huy.jpg")
-//					.status(true)
-//					.password("123")
-//					.phone("0369587452")
-//					.role(GUEST)
-//					.build();
-//			guest = RegisterRequest.builder()
-//					.name("Trần Huy")
-//					.email("tuanpn12301@gmail.com")
-////					.avatar("huy.jpg")
-//					.status(true)
-//					.password("123")
-//					.phone("0369587452")
-//					.role(GUEST)
-//					.build();
-//			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
+			var super_admin= RegisterRequest.builder()
+					.name("Super Admin")
+					.email("Superadmin@gmail.com")
+//					.avatar("admin.jpg")
+					.password("123")
+					.phone("0326514968")
+					.status(true)
+					.role(SUPER_ADMIN)
+					.build();
+			System.out.println("Super_Admin token :"+ service.register(super_admin).getAccessToken());
+
+			var admin= RegisterRequest.builder()
+					.name("Admin")
+					.email("Admin@gmail.com")
+//					.avatar("admin.jpg")
+					.password("123")
+					.phone("0392272536")
+					.status(true)
+					.role(ADMIN)
+					.build();
+			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
+
+			var audience = RegisterRequest.builder()
+					.name("David")
+					.email("david@gmail.com")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0854512367")
+					.role(AUDIENCE)
+					.build();
+			System.out.println("Audience token :"+ service.register(audience).getAccessToken());
+			var creator = RegisterRequest.builder()
+					.name("John")
+					.email("huypt160548@fpt.edu.vn")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0326514875")
+					.role(CREATOR)
+					.build();
+			System.out.println("Creator token :"+ service.register(creator).getAccessToken());
+
+			var guest = RegisterRequest.builder()
+					.name("Trần Huy")
+					.email("huypt110402@gmail.com")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0369587452")
+					.role(GUEST)
+					.build();
+			guest = RegisterRequest.builder()
+					.name("Trần Huy")
+					.email("tuanpn12301@gmail.com")
+//					.avatar("huy.jpg")
+					.status(true)
+					.password("123")
+					.phone("0369587452")
+					.role(GUEST)
+					.build();
+			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
 		};
 
 

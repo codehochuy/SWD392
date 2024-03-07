@@ -10,4 +10,12 @@ public class createPackageUserRequest {
     private LocalDateTime endDate;
     private int userId;
     private int packageId;
+
+    public int getPackageId() {
+        return packageId;
+    }
+
+    public void setPackageId(int packageId) {
+        this.packageId = packageId;
+    }
 }
