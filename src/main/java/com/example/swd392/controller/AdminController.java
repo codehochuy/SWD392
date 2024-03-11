@@ -4,13 +4,18 @@ import com.example.swd392.Request.PackageRequest.CreatePackageRequest;
 import com.example.swd392.Request.PackageRequest.UpdatePackageRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
+import com.example.swd392.Response.OrderResponse.OrderResponse;
 import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Package;
 import com.example.swd392.model.User;
+import com.example.swd392.service.OrderDetailService;
+import com.example.swd392.service.OrderService;
 import com.example.swd392.service.PackageService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import com.example.swd392.Response.PackageResponse.PackageResponse;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +39,10 @@ public class AdminController {
     private UserService iUserService;
     @Autowired
     private PackageService ipackageService;
+    @Autowired
+    private OrderService iorderService;
+    @Autowired
+    private OrderDetailService iorderDetailService;
 
     @PutMapping("/ban/{email}")
     @PreAuthorize("hasAuthority('admin:update')")
@@ -111,6 +122,27 @@ public class AdminController {
     public ResponseEntity<PackageResponse> searchPackage(@RequestParam String packageName) {
         return ipackageService.searchPackage(packageName);
     }
+
+    @GetMapping("/getAllOrders")
+    public ResponseEntity<OrderResponse> getAllOrder() {return iorderService.getAll();
+    }
+    @GetMapping("/getAllOrderDetails")
+    public ResponseEntity<OrderDetailResponse> getAllOrderDetails(@RequestParam int orderID) {
+        return iorderDetailService.getAllOrderDetails(orderID);
+    }
+
+    @DeleteMapping("/deleteOrder/{orderId}")
+    public ResponseEntity<OrderResponse> deleteOrder (@PathVariable int orderId) {
+        return iorderService.deleteOrder(orderId);
+    }
+
+    @GetMapping("/searchOrders")
+    public ResponseEntity<OrderResponse> searchOrders(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        return iorderService.searchOrders(fromDate, toDate);
+    }
+
 
 
 
