@@ -17,4 +17,5 @@ public interface PackageService {
     ResponseEntity<PackageResponse> deletePackage(int packageId);
     Optional<Package> findById(int packageId);
     ResponseEntity<PackageResponse> update(int packageId, UpdatePackageRequest request);
+    ResponseEntity<PackageResponse> searchPackage(String packageName);
 }

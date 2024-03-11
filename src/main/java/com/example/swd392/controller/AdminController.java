@@ -107,6 +107,12 @@ public class AdminController {
     public ResponseEntity<PackageResponse> updatePackage(@PathVariable int packageId, @RequestBody UpdatePackageRequest request) {
         return ipackageService.update(packageId, request);
     }
+    @GetMapping("/searchPackage")
+    public ResponseEntity<PackageResponse> searchPackage(@RequestParam String packageName) {
+        return ipackageService.searchPackage(packageName);
+    }
+
+
 
 
 

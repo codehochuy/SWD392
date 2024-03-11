@@ -201,6 +201,35 @@ public class PackageServiceImplement implements PackageService {
         }
     }
 
+    @Override
+    public ResponseEntity<PackageResponse> searchPackage(String packageName) {
+        try {
+            return packageRepo.findByPackageNameIgnoreCase(packageName)
+                    .map(pkg -> ResponseEntity.ok(PackageResponse.builder()
+                            .status("Success")
+                            .message("Package retrieved successfully")
+                            .packages(Collections.singletonList(pkg))
+                            .build()))
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(PackageResponse.builder()
+                                    .status("Success")
+                                    .message("No packages found with the given name")
+                                    .packages(Collections.emptyList())
+                                    .build()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(PackageResponse.builder()
+                            .status("Error")
+                            .message("Internal server error")
+                            .packages(Collections.emptyList())
+                            .build());
+        }
+    }
+
+
+
+
+
 
 }
 
