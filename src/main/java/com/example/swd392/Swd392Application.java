@@ -111,15 +111,15 @@ public class Swd392Application {
 
 	}
 
-	@Bean
-	public WebMvcConfigurer configure() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:3001");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer configure() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**").allowedOrigins("http://localhost:3001");
+//			}
+//		};
+//	}
 
 
 }

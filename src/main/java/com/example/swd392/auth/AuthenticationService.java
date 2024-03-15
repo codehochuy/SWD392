@@ -141,6 +141,7 @@ public class AuthenticationService {
 //                .userInfo(userRepo.findUserByEmail(request.getEmail()).orElseThrow())
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .userInfo(user)
                 .build();
     }
 

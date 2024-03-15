@@ -1,5 +1,6 @@
 package com.example.swd392.auth;
 
+import com.example.swd392.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,6 @@ public class AuthenticationResponse {
     @JsonProperty("refresh_token")
     private String refreshToken;
     private String status;
-//    private User userInfo;
+    private User userInfo;
 //    private String refreshToken;
 }
