@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  swd-spring-container:
+    container_name: swd-spring-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    # environment:
+      # SPRING_DATASOURCE_URL: jdbc:mysql://mysql8-container:3306/GptStore?serverTimezone=UTC&allowPublicKeyRetrieval=true
+      # MYSQL_ROOT_PASSWORD: taikeo591
+    networks:
+      - gptstore-network
+
+networks:
+  gptstore-network:
+    external: true
