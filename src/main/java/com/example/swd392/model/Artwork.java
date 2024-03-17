@@ -24,9 +24,13 @@ public class Artwork {
     @Column(name = "ArtworkName", length = 30)
     private String artworkName;
 
-    @Lob
+//    @Lob
+//    @Column(name = "ArtworkUrl", length = 1000)
+//    private byte[] artworkUrl;
+
     @Column(name = "ArtworkUrl", length = 1000)
-    private byte[] artworkUrl;
+    private String artworkUrl;
+
 
     @Column(name = "PostedAt")
     private LocalDateTime postedAt;

@@ -91,4 +91,11 @@ public class CreatorController {
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imageData);
     }
+
+    @PostMapping("/create2")
+    @PreAuthorize("hasAuthority('creator:create')")
+    public ResponseEntity<CreateArtworkResponse> createArtwork2(@RequestBody CreateArtworkRequest request) {
+        CreateArtworkResponse response = artworkService.createArtwork2(request);
+        return ResponseEntity.ok(response);
+    }
 }

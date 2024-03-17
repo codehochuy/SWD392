@@ -41,52 +41,53 @@ public class ArtworkServiceImplement implements ArtworkService {
 
     @Override
     public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException {
-        String artworkName = request.getArtworkName();
-        LocalDateTime postedAt = LocalDateTime.now();
-        double price = request.getPrice();
-        int creator = request.getCreator();
-        //Check validate
-        if (artworkName == null || artworkName.isEmpty()) {
-            return CreateArtworkResponse.builder()
-                    .status("Artwork name cannot be empty")
-                    .artwork(null)
-                    .build();
-        } else if (artworkName.length() > 30) {
-            return CreateArtworkResponse.builder()
-                    .status("Artwork name must not exceed 30 characters")
-                    .artwork(null)
-                    .build();
-        } else if (price <= 0 || price > 100000000) {
-            return CreateArtworkResponse.builder()
-                    .status("Wrong value !")
-                    .artwork(null)
-                    .build();
-        }
-        var user = userRepo.findUserByUsersID(creator).orElse(null);
-        if (user != null && user.getRole() == Role.CREATOR) {
-            Artwork artwork = Artwork.builder()
-                    .artworkName(artworkName)
-                    .user(user)
-                    .price(price)
-                    .commentCount(0)
-                    .likeCount(0)
-                    .postedAt(postedAt)
-                    .build();
-            byte[] imageData = file.getBytes();
-            byte[] compressedImageData = ImageUtil.compressImage(imageData);
-            artwork.setArtworkUrl(compressedImageData);
-            artworkRepo.save(artwork);
-
-            return CreateArtworkResponse.builder()
-                    .status("Create Artwork Successfully")
-                    .artwork(artwork)
-                    .build();
-        } else {
-            return CreateArtworkResponse.builder()
-                    .status("Create Artwork Fail")
-                    .artwork(null)
-                    .build();
-        }
+//        String artworkName = request.getArtworkName();
+//        LocalDateTime postedAt = LocalDateTime.now();
+//        double price = request.getPrice();
+//        int creator = request.getCreator();
+//        //Check validate
+//        if (artworkName == null || artworkName.isEmpty()) {
+//            return CreateArtworkResponse.builder()
+//                    .status("Artwork name cannot be empty")
+//                    .artwork(null)
+//                    .build();
+//        } else if (artworkName.length() > 30) {
+//            return CreateArtworkResponse.builder()
+//                    .status("Artwork name must not exceed 30 characters")
+//                    .artwork(null)
+//                    .build();
+//        } else if (price <= 0 || price > 100000000) {
+//            return CreateArtworkResponse.builder()
+//                    .status("Wrong value !")
+//                    .artwork(null)
+//                    .build();
+//        }
+//        var user = userRepo.findUserByUsersID(creator).orElse(null);
+//        if (user != null && user.getRole() == Role.CREATOR) {
+//            Artwork artwork = Artwork.builder()
+//                    .artworkName(artworkName)
+//                    .user(user)
+//                    .price(price)
+//                    .commentCount(0)
+//                    .likeCount(0)
+//                    .postedAt(postedAt)
+//                    .build();
+//            byte[] imageData = file.getBytes();
+//            byte[] compressedImageData = ImageUtil.compressImage(imageData);
+//            artwork.setArtworkUrl(compressedImageData);
+//            artworkRepo.save(artwork);
+//
+//            return CreateArtworkResponse.builder()
+//                    .status("Create Artwork Successfully")
+//                    .artwork(artwork)
+//                    .build();
+//        } else {
+//            return CreateArtworkResponse.builder()
+//                    .status("Create Artwork Fail")
+//                    .artwork(null)
+//                    .build();
+//        }
+        return  null;
     }
 
     @Override
@@ -154,11 +155,61 @@ public class ArtworkServiceImplement implements ArtworkService {
 
     @Override
     public byte[] downloadImage(int fileName) {
-        Artwork artwork = artworkRepo.findByArtworkId(fileName).orElse(null);
-        if (artwork == null || artwork.getArtworkUrl() == null) {
-            return null;
+//        Artwork artwork = artworkRepo.findByArtworkId(fileName).orElse(null);
+//        if (artwork == null || artwork.getArtworkUrl() == null) {
+//            return null;
+//        }
+//        return ImageUtil.decompressImage(artwork.getArtworkUrl());
+        return null;
+    }
+
+    @Override
+    public CreateArtworkResponse createArtwork2(CreateArtworkRequest request) {
+        String artworkName = request.getArtworkName();
+        String artworkUrl = request.getUrl();
+        LocalDateTime postedAt = LocalDateTime.now();
+        double price = request.getPrice();
+        int creator = request.getCreator();
+        //Check validate
+        if (artworkName == null || artworkName.isEmpty()) {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork name cannot be empty")
+                    .artwork(null)
+                    .build();
+        } else if (artworkName.length() > 30) {
+            return CreateArtworkResponse.builder()
+                    .status("Artwork name must not exceed 30 characters")
+                    .artwork(null)
+                    .build();
+        } else if (price <= 0 || price > 100000000) {
+            return CreateArtworkResponse.builder()
+                    .status("Wrong value !")
+                    .artwork(null)
+                    .build();
         }
-        return ImageUtil.decompressImage(artwork.getArtworkUrl());
+        var user = userRepo.findUserByUsersID(creator).orElse(null);
+        if (user != null && user.getRole() == Role.CREATOR) {
+            Artwork artwork = Artwork.builder()
+                    .artworkName(artworkName)
+                    .artworkUrl(artworkUrl)
+                    .user(user)
+                    .price(price)
+                    .commentCount(0)
+                    .likeCount(0)
+                    .postedAt(postedAt)
+                    .build();
+            artworkRepo.save(artwork);
+
+            return CreateArtworkResponse.builder()
+                    .status("Create Artwork Successfully")
+                    .artwork(artwork)
+                    .build();
+        } else {
+            return CreateArtworkResponse.builder()
+                    .status("Create Artwork Fail")
+                    .artwork(null)
+                    .build();
+        }
     }
 
 }

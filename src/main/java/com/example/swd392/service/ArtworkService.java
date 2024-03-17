@@ -30,4 +30,6 @@ public interface ArtworkService {
 
     List<Artwork> findArtworksByFilter(String artworkName,  double price);
     public byte[] downloadImage(int fileName);
+
+    public CreateArtworkResponse createArtwork2(CreateArtworkRequest request);
 }
