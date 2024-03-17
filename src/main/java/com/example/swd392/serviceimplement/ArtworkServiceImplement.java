@@ -1,5 +1,7 @@
 package com.example.swd392.serviceimplement;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
 import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
@@ -13,6 +15,7 @@ import com.example.swd392.model.User;
 import com.example.swd392.repository.ArtworkRepo;
 import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.ArtworkService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -31,6 +35,10 @@ public class ArtworkServiceImplement implements ArtworkService {
     private ArtworkRepo artworkRepo;
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private  Cloudinary cloudinary;
+
 
     @Override
     public List<Artwork> getListArtworkForGuest(int count) {
@@ -162,11 +170,23 @@ public class ArtworkServiceImplement implements ArtworkService {
 //        return ImageUtil.decompressImage(artwork.getArtworkUrl());
         return null;
     }
+    public String uploadImageToCloudinary(MultipartFile file) {
+        try {
+            // Upload image to Cloudinary
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+
+            // Get the URL of the uploaded image from Cloudinary response
+            return (String) uploadResult.get("url");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
-    public CreateArtworkResponse createArtwork2(CreateArtworkRequest request) {
+    public CreateArtworkResponse createArtwork2(CreateArtworkRequest request,MultipartFile file) {
         String artworkName = request.getArtworkName();
-        String artworkUrl = request.getUrl();
+//        String artworkUrl = request.getUrl();
         LocalDateTime postedAt = LocalDateTime.now();
         double price = request.getPrice();
         int creator = request.getCreator();
@@ -189,6 +209,7 @@ public class ArtworkServiceImplement implements ArtworkService {
         }
         var user = userRepo.findUserByUsersID(creator).orElse(null);
         if (user != null && user.getRole() == Role.CREATOR) {
+            String artworkUrl = uploadImageToCloudinary(file);
             Artwork artwork = Artwork.builder()
                     .artworkName(artworkName)
                     .artworkUrl(artworkUrl)
@@ -211,5 +232,6 @@ public class ArtworkServiceImplement implements ArtworkService {
                     .build();
         }
     }
+
 
 }

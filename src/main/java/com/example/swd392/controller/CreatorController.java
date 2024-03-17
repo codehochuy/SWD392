@@ -92,10 +92,25 @@ public class CreatorController {
                 .body(imageData);
     }
 
+//    @PostMapping("/create2")
+//    @PreAuthorize("hasAuthority('creator:create')")
+//    public ResponseEntity<CreateArtworkResponse> createArtwork2(@RequestBody CreateArtworkRequest request) {
+//        CreateArtworkResponse response = artworkService.createArtwork2(request);
+//        return ResponseEntity.ok(response);
+//    }
+
     @PostMapping("/create2")
     @PreAuthorize("hasAuthority('creator:create')")
-    public ResponseEntity<CreateArtworkResponse> createArtwork2(@RequestBody CreateArtworkRequest request) {
-        CreateArtworkResponse response = artworkService.createArtwork2(request);
+    public ResponseEntity<CreateArtworkResponse> createArtwork2(
+            @RequestParam("artworkName") String artworkName,
+            @RequestParam("creator") int creator,
+            @RequestParam("price") double price,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        CreateArtworkRequest request = new CreateArtworkRequest();
+        request.setArtworkName(artworkName);
+        request.setCreator(creator);
+        request.setPrice(price);
+        CreateArtworkResponse response = artworkService.createArtwork2(request, file);
         return ResponseEntity.ok(response);
     }
 }
