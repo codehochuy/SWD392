@@ -10,6 +10,8 @@ import com.example.swd392.model.Comment;
 import com.example.swd392.service.ArtworkService;
 import com.example.swd392.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -76,5 +78,17 @@ public class CreatorController {
     ) {
         List<Artwork> artworkList = artworkService.findArtworksByFilter(artworkName, price);
         return ResponseEntity.ok(artworkList);
+    }
+    @GetMapping("/{id}")
+//    @PreAuthorize("hasAuthority('audience:read')")
+    public ResponseEntity<?> downloadImage(@PathVariable int id){
+        byte[] imageData = artworkService.downloadImage(id);
+        if(imageData == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Avatar not found" + id);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
     }
 }

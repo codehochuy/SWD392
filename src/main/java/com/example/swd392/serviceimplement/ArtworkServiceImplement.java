@@ -66,13 +66,15 @@ public class ArtworkServiceImplement implements ArtworkService {
         if (user != null && user.getRole() == Role.CREATOR) {
             Artwork artwork = Artwork.builder()
                     .artworkName(artworkName)
-                    .artworkUrl(ImageUtil.compressImage(file.getBytes()))
                     .user(user)
                     .price(price)
                     .commentCount(0)
                     .likeCount(0)
                     .postedAt(postedAt)
                     .build();
+            byte[] imageData = file.getBytes();
+            byte[] compressedImageData = ImageUtil.compressImage(imageData);
+            artwork.setArtworkUrl(compressedImageData);
             artworkRepo.save(artwork);
 
             return CreateArtworkResponse.builder()
@@ -148,6 +150,15 @@ public class ArtworkServiceImplement implements ArtworkService {
     @Override
     public List<Artwork> findArtworksByFilter(String artworkName,  double price) {
         return artworkRepo.findArtworksByFilter(artworkName, price);
+    }
+
+    @Override
+    public byte[] downloadImage(int fileName) {
+        Artwork artwork = artworkRepo.findByArtworkId(fileName).orElse(null);
+        if (artwork == null || artwork.getArtworkUrl() == null) {
+            return null;
+        }
+        return ImageUtil.decompressImage(artwork.getArtworkUrl());
     }
 
 }

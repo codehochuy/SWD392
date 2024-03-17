@@ -29,4 +29,5 @@ public interface ArtworkService {
     List<Artwork> getAllArtworks();
 
     List<Artwork> findArtworksByFilter(String artworkName,  double price);
+    public byte[] downloadImage(int fileName);
 }
