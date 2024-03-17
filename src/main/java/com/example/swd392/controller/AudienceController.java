@@ -27,10 +27,7 @@ import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestRe
 import com.example.swd392.Response.PreorderResponseResponse.CreatePreorderResponseResponse;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
-import com.example.swd392.model.Cart;
-import com.example.swd392.model.Comment;
-import com.example.swd392.model.Follower;
-import com.example.swd392.model.User;
+import com.example.swd392.model.*;
 import com.example.swd392.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -64,6 +61,8 @@ public class AudienceController {
 
     @Autowired
     private LikeService likeService;
+    @Autowired
+    private ArtworkService artworkService;
 
     @Autowired
     private PreorderRequestService preorderRequestService;
@@ -309,5 +308,10 @@ public class AudienceController {
     public ResponseEntity<CreatePackageUserResponse> createPackageUser(@RequestBody createPackageUserRequest request) {
         return packageUserService.createPackageUser(request);
 
+    }
+    @GetMapping("/getAllArtWork")
+    public ResponseEntity<List<Artwork>> getAllArtwork() {
+        List<Artwork> artworks = artworkService.getAllArtworks();
+        return ResponseEntity.ok(artworks);
     }
 }
