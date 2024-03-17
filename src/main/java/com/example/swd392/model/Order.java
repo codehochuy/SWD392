@@ -30,7 +30,5 @@ public class Order {
     @JoinColumn(name = "AudienceID")
     private User audience;
 
-    @ManyToOne
-    @JoinColumn(name = "UsersID")
-    private User creator;
+
 }

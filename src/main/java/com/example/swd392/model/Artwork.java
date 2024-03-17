@@ -45,7 +45,7 @@ public class Artwork {
     private int commentCount;
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "UsersID")
     private User user;
 }
