@@ -5,9 +5,11 @@ import com.example.swd392.Response.OrderResponse.CreateOrderResponse;
 import com.example.swd392.Response.OrderResponse.OrderResponse;
 import com.example.swd392.Response.PackageResponse.PackageResponse;
 import com.example.swd392.enums.Role;
+import com.example.swd392.model.Cart;
 import com.example.swd392.model.Order;
 import com.example.swd392.model.Package;
 import com.example.swd392.model.User;
+import com.example.swd392.repository.CartRepo;
 import com.example.swd392.repository.OrderRepo;
 import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.OrderService;
@@ -29,6 +31,8 @@ public class OrderServiceImplement implements OrderService {
     private OrderRepo orderRepo;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private CartRepo cartRepository;
     @Override
     public ResponseEntity<OrderResponse> getAll() {
         List<Order> orders = orderRepo.findAll();
@@ -95,16 +99,25 @@ public class OrderServiceImplement implements OrderService {
         LocalDateTime postedAt = LocalDateTime.now();
         var user = userRepo.findUserByUsersID(audience).orElse(null);
         if(user != null && (user.getRole() == Role.AUDIENCE || user.getRole()==Role.CREATOR)){
-            Order order = Order.builder()
-                    .orderDate(postedAt)
-                    .orderPrice(orderPrice)
-                    .audience(user)
-                    .build();
-            orderRepo.save(order);
-            return CreateOrderResponse.builder()
-                    .status("Create order successful")
-                    .order(order)
-                    .build();
+            List<Cart> cartItems = cartRepository.findByUser(user);
+            if (!cartItems.isEmpty()) {
+                Order order = Order.builder()
+                        .orderDate(postedAt)
+                        .orderPrice(orderPrice)
+                        .audience(user)
+                        .build();
+                orderRepo.save(order);
+                return CreateOrderResponse.builder()
+                        .status("Create order successful")
+                        .order(order)
+                        .build();
+            }else {
+                return CreateOrderResponse.builder()
+                        .status("Create fail")
+                        .order(null)
+                        .build();
+            }
+
         }
         else {
             return CreateOrderResponse.builder()
