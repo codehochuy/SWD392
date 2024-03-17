@@ -13,5 +13,6 @@ public interface OrderRepo extends JpaRepository<Order,Integer> {
     @Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :fromDate AND :toDate")
     List<Order> findByOrderDateBetween(LocalDateTime fromDate, LocalDateTime toDate);
     Optional<Order> findOrderByOrderId(int orderId);
+    Optional<Order> findOrderByAudience(User audience);
 
 }

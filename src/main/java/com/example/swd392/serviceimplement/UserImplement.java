@@ -107,6 +107,14 @@ public class UserImplement implements UserService {
         return userRepo.save(user);
     }
 
+    @Override
+    public User getUserById(int audienceId) {
+        Optional<User> userOptional = userRepo.findById(audienceId);
+        return userOptional.orElse(null);
+    }
+
+
+
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {

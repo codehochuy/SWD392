@@ -335,4 +335,16 @@ public class AudienceController {
         CreateOrderDetailResponse response = orderDetailService.createOrderDetail(request);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/order/{audienceId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public Optional<Order> getOrdersByAudience(@PathVariable int audienceId) {
+        User audience = iUserService.getUserById(audienceId);
+        if (audience != null) {
+            return orderService.getOrdersByAudience(audience);
+        } else {
+            return Optional.empty();
+        }
+    }
+
 }
