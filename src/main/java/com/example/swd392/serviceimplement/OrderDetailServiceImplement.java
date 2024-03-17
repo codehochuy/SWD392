@@ -1,8 +1,14 @@
 package com.example.swd392.serviceimplement;
 
+import com.example.swd392.Request.OrderDetailRequest.CreateOrderDetailRequest;
+import com.example.swd392.Response.OrderDetailResponse.CreateOrderDetailResponse;
 import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
+import com.example.swd392.model.Cart;
 import com.example.swd392.model.OrderDetail;
+import com.example.swd392.repository.CartRepo;
 import com.example.swd392.repository.OrderDetailRepo;
+import com.example.swd392.repository.OrderRepo;
+import com.example.swd392.repository.UserRepo;
 import com.example.swd392.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +22,12 @@ import java.util.Optional;
 public class OrderDetailServiceImplement implements OrderDetailService {
     @Autowired
     private OrderDetailRepo orderDetailRepo;
+    @Autowired
+    private CartRepo cartRepository;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private OrderRepo orderRepo;
     @Override
     public ResponseEntity<OrderDetailResponse> getAllOrderDetails(int orderID) {
         List<OrderDetail> orderDetails = orderDetailRepo.findByOrder_OrderId(orderID);
@@ -26,5 +38,46 @@ public class OrderDetailServiceImplement implements OrderDetailService {
         response.setOrderDetails(orderDetails);
 
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public CreateOrderDetailResponse createOrderDetail(CreateOrderDetailRequest request) {
+        int orderId = request.getOrderId();
+        var order = orderRepo.findOrderByOrderId(orderId).orElse(null);
+        if(order != null){
+            int audience = request.getAudience();
+            var user = userRepo.findUserByUsersID(audience).orElse(null);
+            if(user != null && user.getUsersID()==order.getAudience().getUsersID()){
+                List<Cart> cartItems = cartRepository.findByUser(user);
+                if (!cartItems.isEmpty()) {
+                    for (Cart cartItem : cartItems) {
+                        OrderDetail orderDetail = OrderDetail.builder()
+                                .artwork(cartItem.getArtwork())
+                                .orderDetailPrice(cartItem.getArtwork().getPrice())
+                                .order(order)
+                                .build();
+                        orderDetailRepo.save(orderDetail);
+                        cartRepository.delete(cartItem);
+                    }
+                    return CreateOrderDetailResponse.builder()
+                            .status("Create order detail successful")
+                            .build();
+                }else {
+                    return CreateOrderDetailResponse.builder()
+                            .status("Cart is empty")
+                            .build();
+                }
+
+            }else {
+                return CreateOrderDetailResponse.builder()
+                        .status("User not found")
+                        .build();
+            }
+
+        }else{
+            return CreateOrderDetailResponse.builder()
+                    .status("Order not found")
+                    .build();
+        }
     }
 }

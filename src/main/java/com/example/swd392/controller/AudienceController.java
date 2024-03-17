@@ -6,6 +6,8 @@ import com.example.swd392.Request.FollowerRequest.CreateFollowerRequest;
 
 import com.example.swd392.Request.LikeRequest.CreateLikeRequest;
 
+import com.example.swd392.Request.OrderDetailRequest.CreateOrderDetailRequest;
+import com.example.swd392.Request.OrderRequest.CreateOrderRequest;
 import com.example.swd392.Request.PackageUser.createPackageUserRequest;
 import com.example.swd392.Request.PreorderRequestRequest.CreatePreorderRequestRequest;
 import com.example.swd392.Request.PreorderResponseRequest.CreatePreorderResponseRequest;
@@ -19,6 +21,8 @@ import com.example.swd392.Response.LikeResponse.ListLikeResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 
 
+import com.example.swd392.Response.OrderDetailResponse.CreateOrderDetailResponse;
+import com.example.swd392.Response.OrderResponse.CreateOrderResponse;
 import com.example.swd392.Response.PackageUserResponse.CreatePackageUserResponse;
 import com.example.swd392.Response.PreorderRequestResponse.CreatePreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequestResponse;
@@ -63,7 +67,11 @@ public class AudienceController {
     private LikeService likeService;
     @Autowired
     private ArtworkService artworkService;
+    @Autowired
+    private OrderService orderService;
 
+    @Autowired
+    private OrderDetailService orderDetailService;
     @Autowired
     private PreorderRequestService preorderRequestService;
     @Autowired
@@ -313,5 +321,18 @@ public class AudienceController {
     public ResponseEntity<List<Artwork>> getAllArtwork() {
         List<Artwork> artworks = artworkService.getAllArtworks();
         return ResponseEntity.ok(artworks);
+    }
+
+    @PostMapping("/createOrder")
+    @PreAuthorize("hasAuthority('audience:create')")
+    public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
+        CreateOrderResponse response = orderService.createOrder(request);
+        return ResponseEntity.ok(response);
+    }
+    @PostMapping("/createOrderDetail")
+    @PreAuthorize("hasAuthority('audience:create')")
+    public ResponseEntity<CreateOrderDetailResponse> createOrderDetail(@RequestBody CreateOrderDetailRequest request) {
+        CreateOrderDetailResponse response = orderDetailService.createOrderDetail(request);
+        return ResponseEntity.ok(response);
     }
 }
