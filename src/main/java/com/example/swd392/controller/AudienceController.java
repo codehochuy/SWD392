@@ -346,5 +346,10 @@ public class AudienceController {
             return Optional.empty();
         }
     }
+    @GetMapping("/orderDetail/{orderId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public List<OrderDetail> getOrderDetailsByOrderId(@PathVariable int orderId) {
+        return orderDetailService.getOrderDetailsByOrderId(orderId);
+    }
 
 }

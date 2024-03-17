@@ -80,4 +80,15 @@ public class OrderDetailServiceImplement implements OrderDetailService {
                     .build();
         }
     }
+
+    @Override
+    public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
+        var order = orderRepo.findOrderByOrderId(orderId).orElse(null);
+        if(order != null){
+            return orderDetailRepo.findOrderDetailByOrder(order);
+        }
+        else{
+            return null;
+        }
+    }
 }
