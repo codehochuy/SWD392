@@ -64,6 +64,7 @@ public class CommentServiceImplement implements CommentService {
 
 
             Comment savedComment = commentRepository.save(comment);
+            artwork.setCommentCount(artwork.getCommentCount()+1);
 
             return ResponseEntity.ok(new ResponseObject(
                     "Success",
