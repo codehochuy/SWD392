@@ -246,9 +246,10 @@ public class AudienceController {
         List<Follower> followerList = followerService.searchFollowers(userId, accountName);
         return ResponseEntity.ok(followerList);
     }
-    @PostMapping("/createLike")
-    public ResponseEntity<CreateLikeResponse> createLike(@RequestBody CreateLikeRequest likeRequest) {
-        return likeService.createLike(likeRequest);
+    @PostMapping("/Like")
+    @PreAuthorize("hasAuthority('audience:create')")
+    public CreateLikeResponse createLike(@RequestBody CreateLikeRequest likeRequest) {
+        return likeService.Like(likeRequest);
     }
     @DeleteMapping("/deleteLike/{likeId}")
     public ResponseEntity<DeleteLikeResponse> deleteLike(@PathVariable int likeId) {

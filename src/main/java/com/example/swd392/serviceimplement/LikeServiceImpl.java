@@ -9,6 +9,7 @@ import com.example.swd392.Response.LikeResponse.CreateLikeResponse;
 import com.example.swd392.Response.LikeResponse.DeleteLikeResponse;
 import com.example.swd392.Response.LikeResponse.FindLikeResponse;
 import com.example.swd392.Response.LikeResponse.ListLikeResponse;
+import com.example.swd392.enums.Role;
 import com.example.swd392.model.Artwork;
 import com.example.swd392.model.Follower;
 import com.example.swd392.model.Like;
@@ -32,46 +33,50 @@ public class LikeServiceImpl implements LikeService {
 
     @Autowired
     private LikeRepository likeRepository;
-
+    @Autowired
+    private UserRepo userRepo;
 
    @Autowired
-   private UserRepo userRepository;
-   @Autowired
-   private ArtworkRepo artworkRepository;
+   private ArtworkRepo artworkRepo;
 
     @Override
-    public ResponseEntity<CreateLikeResponse> createLike(CreateLikeRequest likeRequest) {
-        try {
-            // Kiểm tra các trường cần thiết
-            if (likeRequest.getUserId() == 0 || likeRequest.getArtworkId() == 0) {
-                return ResponseEntity.badRequest().body(new CreateLikeResponse("Fail", "User id and artwork id are required", null));
+    public CreateLikeResponse Like(CreateLikeRequest likeRequest) {
+        int userid = likeRequest.getUserId();
+        int artworkId = likeRequest.getArtworkId();
+        var user = userRepo.findUserByUsersID(userid).orElse(null);
+        Artwork artwork = artworkRepo.findById(artworkId).orElse(null);
+        if(user!=null && (user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)){
+            if(artwork != null){
+                Like likeCheck =likeRepository.findByUserAndArtwork(user, artwork);
+                if (likeCheck==null) {
+                    Like like = new Like();
+                    like.setUser(user);
+                    like.setArtwork(artwork);
+                    likeRepository.save(like);
+                    artwork.setLikeCount(artwork.getLikeCount() + 1);
+                    artworkRepo.save(artwork);
+                    return CreateLikeResponse.builder()
+                            .status("Like successful")
+                            .build();
+                }else {
+                    likeRepository.delete(likeCheck);
+                    artwork.setLikeCount(artwork.getLikeCount() - 1);
+                    artworkRepo.save(artwork);
+                    return CreateLikeResponse.builder()
+                            .status("UnLike successful")
+                            .build();
+                }
+
+            }else{
+                return CreateLikeResponse.builder()
+                        .status("Artwork not found !")
+                        .build();
             }
 
-            // Lấy thông tin người dùng và artwork
-            User user = userRepository.findById(likeRequest.getUserId()).orElse(null);
-            Artwork artwork = artworkRepository.findById(likeRequest.getArtworkId()).orElse(null);
-            if (user == null || artwork == null) {
-                return ResponseEntity.badRequest().body(new CreateLikeResponse("Fail", "User or artwork not found", null));
-            }
-
-            // Kiểm tra xem đã tồn tại một like giống nhau trong cơ sở dữ liệu hay không
-            if (likeRepository.existsByUserAndArtwork(user, artwork)) {
-                return ResponseEntity.badRequest().body(new CreateLikeResponse("Fail", "User already liked the artwork", null));
-            }
-
-            // Tạo đối tượng Like từ request
-            Like like = new Like();
-            like.setUser(user);
-            like.setArtwork(artwork);
-
-            // Lưu đối tượng vào cơ sở dữ liệu
-            Like savedLike = likeRepository.save(like);
-            Artwork artwork1 = new Artwork();
-            artwork1.setLikeCount(+1);
-            // Tạo response
-            return ResponseEntity.ok(new CreateLikeResponse("Success", "Create like success", savedLike));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(new CreateLikeResponse("Fail", "Internal Server Error", null));
+        }else {
+            return CreateLikeResponse.builder()
+                    .status("User not found !")
+                    .build();
         }
     }
 

@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Integer> {
     boolean existsByUserAndArtwork(User user, Artwork artwork);
+    Like findByUserAndArtwork(User user, Artwork artwork);
 }

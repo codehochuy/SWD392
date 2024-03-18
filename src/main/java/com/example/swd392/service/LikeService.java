@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 public interface LikeService {
-    ResponseEntity<CreateLikeResponse> createLike(CreateLikeRequest likeRequest);
+    CreateLikeResponse Like(CreateLikeRequest likeRequest);
 
 
     ResponseEntity<DeleteLikeResponse> deleteLike(int likeId);
