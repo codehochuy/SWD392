@@ -27,17 +27,5 @@ public class SuperAdminController {
     public void sendNotification(@RequestBody String message) {
         messagingTemplate.convertAndSend("/topic/notification", message);
     }
-    @PutMapping("/{userId}/reduce")
-    @PreAuthorize("hasAuthority('super_admin:update')")
-    public ResponseEntity<UpdateUserResponse> updateAccountBalance(
-            @PathVariable("userId") int userId,
-            @RequestBody BalanceRequest request) {
-        UpdateUserResponse response = iUserService.ReduceAccountBalance(userId, request);
 
-        if (response.getUser() != null) {
-            return ResponseEntity.ok(response);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
 }

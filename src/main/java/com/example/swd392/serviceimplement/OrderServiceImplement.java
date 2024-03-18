@@ -99,25 +99,35 @@ public class OrderServiceImplement implements OrderService {
         LocalDateTime postedAt = LocalDateTime.now();
         var user = userRepo.findUserByUsersID(audience).orElse(null);
         if(user != null && (user.getRole() == Role.AUDIENCE || user.getRole()==Role.CREATOR)){
-            List<Cart> cartItems = cartRepository.findByUser(user);
-            if (!cartItems.isEmpty()) {
-                Order order = Order.builder()
-                        .orderDate(postedAt)
-                        .orderPrice(orderPrice)
-                        .audience(user)
-                        .build();
-                orderRepo.save(order);
-                return CreateOrderResponse.builder()
-                        .status("Create order successful")
-                        .order(order)
-                        .build();
+            double balance = user.getAccountBalance();
+            if(balance>orderPrice){
+                user.setAccountBalance(user.getAccountBalance()-orderPrice);
+                List<Cart> cartItems = cartRepository.findByUser(user);
+                if (!cartItems.isEmpty()) {
+                    Order order = Order.builder()
+                            .orderDate(postedAt)
+                            .orderPrice(orderPrice)
+                            .audience(user)
+                            .build();
+                    orderRepo.save(order);
+                    userRepo.save(user);
+                    return CreateOrderResponse.builder()
+                            .status("Create order successful")
+                            .order(order)
+                            .build();
+                }else {
+                    return CreateOrderResponse.builder()
+                            .status("Create fail")
+                            .order(null)
+                            .build();
+                }
+
             }else {
                 return CreateOrderResponse.builder()
-                        .status("Create fail")
+                        .status("Your balance is not enough")
                         .order(null)
                         .build();
             }
-
         }
         else {
             return CreateOrderResponse.builder()
