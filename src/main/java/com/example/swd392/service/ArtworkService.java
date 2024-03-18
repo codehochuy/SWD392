@@ -32,4 +32,6 @@ public interface ArtworkService {
     public byte[] downloadImage(int fileName);
 
     public CreateArtworkResponse createArtwork2(CreateArtworkRequest request,MultipartFile file);
+
+    List<Artwork> getArtWorkByCreatorId(int id);
 }

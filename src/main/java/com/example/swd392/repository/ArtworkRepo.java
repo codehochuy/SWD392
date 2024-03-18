@@ -16,5 +16,7 @@ public interface ArtworkRepo extends JpaRepository<Artwork,Integer> {
             "(:artworkName IS NULL OR a.artworkName LIKE %:artworkName%) AND " +
             "(:price IS NULL OR a.price = :price)")
     List<Artwork> findArtworksByFilter(String artworkName, Double price);
+
+    List<Artwork> findByUser(User user);
 }
 

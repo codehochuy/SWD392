@@ -233,5 +233,14 @@ public class ArtworkServiceImplement implements ArtworkService {
         }
     }
 
+    @Override
+    public List<Artwork> getArtWorkByCreatorId(int id) {
+        var user = userRepo.findByUsersID(id).orElse(null);
+        if (user != null) {
+            return artworkRepo.findByUser(user);
+        } else {
+            return  null;
+        }
+    }
 
 }

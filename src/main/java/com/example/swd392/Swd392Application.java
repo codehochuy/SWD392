@@ -6,6 +6,8 @@ import com.example.swd392.auth.AuthenticationRequest;
 import com.example.swd392.auth.AuthenticationService;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.enums.Role;
+import com.example.swd392.model.Artwork;
+import com.example.swd392.model.User;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static com.example.swd392.enums.Role.*;
 
@@ -116,9 +119,18 @@ public class Swd392Application {
 					.role(GUEST)
 					.build();
 			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
+
+			/*LocalDateTime postedAt = LocalDateTime.now();
+			var artwork = Artwork.builder()
+					.artworkName("Art work Test")
+					.artworkUrl("http://res.cloudinary.com/dpxs39hkb/image/upload/v1710745246/ezoht5nzikongqhcf2fi.jpg")
+					.price(150000)
+					.commentCount(0)
+					.likeCount(0)
+					.user()
+					.postedAt(postedAt)
+					.build();*/
 		};
-
-
 	}
 
 //	@Bean
