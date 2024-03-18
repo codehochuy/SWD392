@@ -1,5 +1,6 @@
 package com.example.swd392.serviceimplement;
 
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
@@ -37,7 +38,7 @@ public class ArtworkServiceImplement implements ArtworkService {
     private UserRepo userRepo;
 
     @Autowired
-    private  Cloudinary cloudinary;
+    private Cloudinary cloudinary;
 
 
     @Override
