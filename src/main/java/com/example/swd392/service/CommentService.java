@@ -23,4 +23,7 @@ public interface CommentService {
     List<Comment> getAllComments();
 
     List<Comment> searchCommentsFilter(String commentText, Date commentedAt);
+
+    List<Comment> getAllCommentsByArtworkId(int artworkId);
+
 }

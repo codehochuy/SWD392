@@ -3,7 +3,9 @@ package com.example.swd392.serviceimplement;
 import com.example.swd392.Request.CommentRequest.CreateCommentRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.enums.Role;
+import com.example.swd392.model.Artwork;
 import com.example.swd392.model.Comment;
+import com.example.swd392.model.User;
 import com.example.swd392.repository.ArtworkRepo;
 import com.example.swd392.repository.CommentRepository;
 import com.example.swd392.repository.UserRepo;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,48 +35,55 @@ public class CommentServiceImplement implements CommentService {
 
     @Override
     public ResponseEntity<ResponseObject> createComment(CreateCommentRequest createCommentRequest) {
-        int userid = createCommentRequest.getUserId();
-        int artworkId = createCommentRequest.getArtworkId();
-        var user = userRepo.findUserByUsersID(userid).orElse(null);
-        var artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
-        if (user != null &&(user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)) {
-            if (artwork != null) {
-                Comment comment = new Comment();
-                comment.setCommentText(createCommentRequest.getCommentText());
-                comment.setCommentedAt(new Date());
-                comment.setUser(user);
-                Comment savedComment = commentRepository.save(comment);
-                return ResponseEntity.ok(new
-                        ResponseObject(
-                        "Success",
-                        "Create comment success",
-                        savedComment));
-
-            }else {
-                return ResponseEntity.ok(new
-                        ResponseObject(
+        try {
+            int userId = createCommentRequest.getUserId();
+            int artworkId = createCommentRequest.getArtworkId();
+            User user = userRepo.findUserByUsersID(userId).orElse(null);
+            Artwork artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
+            if (user == null || artwork == null) {
+                return ResponseEntity.ok(new ResponseObject(
                         "Fail",
-                        "Create comment fail",
+                        "User or artwork not found",
                         null));
-
             }
 
-        }else {
-            return ResponseEntity.ok(new
-                    ResponseObject(
+
+            if (user.getRole() != Role.AUDIENCE && user.getRole() != Role.CREATOR) {
+                return ResponseEntity.ok(new ResponseObject(
+                        "Fail",
+                        "User does not have permission to create comment",
+                        null));
+            }
+
+
+            Comment comment = new Comment();
+            comment.setCommentText(createCommentRequest.getCommentText());
+            comment.setCommentedAt(new Date());
+            comment.setUser(user);
+            comment.setArtwork(artwork);
+
+
+            Comment savedComment = commentRepository.save(comment);
+
+            return ResponseEntity.ok(new ResponseObject(
+                    "Success",
+                    "Create comment success",
+                    savedComment));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseObject(
                     "Fail",
-                    "User not found",
+                    "Internal Server Error",
                     null));
         }
-
     }
+
 
     @Override
     public ResponseEntity<ResponseObject> updateComment(Integer commentId, CreateCommentRequest createCommentRequest) {
         try {
             Comment existingComment = commentRepository.findById(commentId).orElse(null);
             if (existingComment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
             existingComment.setCommentText(createCommentRequest.getCommentText());
             existingComment.setCommentedAt(new Date());
@@ -90,10 +100,10 @@ public class CommentServiceImplement implements CommentService {
         try {
             Comment comment = commentRepository.findById(commentId).orElse(null);
             if (comment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
             commentRepository.delete(comment);
-            return ResponseEntity.ok(new ResponseObject("Success", "Delete blog success", null));
+            return ResponseEntity.ok(new ResponseObject("Success", "Delete Comment success", null));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
@@ -104,9 +114,9 @@ public class CommentServiceImplement implements CommentService {
         try {
             Comment comment = commentRepository.findById(commentId).orElse(null);
             if (comment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
-            return ResponseEntity.ok(new ResponseObject("Success", "Find blog success", comment));
+            return ResponseEntity.ok(new ResponseObject("Success", "Find Comment success", comment));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
@@ -130,6 +140,17 @@ public class CommentServiceImplement implements CommentService {
             return commentRepository.findAll();
         }
     }
+
+    @Override
+    public List<Comment> getAllCommentsByArtworkId(int artworkId) {
+        List<Comment> comments = commentRepository.findByArtwork_ArtworkId(artworkId);
+        if (comments == null || comments.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return comments;
+    }
+
+
 }
 
 

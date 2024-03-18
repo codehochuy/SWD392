@@ -14,4 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment,Integer> {
     List<Comment> findByCommentTextContaining(String commentText);
 
     List<Comment> findByCommentedAt(Date commentedAt);
+
+    List<Comment> findByArtwork_ArtworkId(int artworkId);
+
 }
