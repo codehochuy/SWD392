@@ -1,6 +1,7 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
+import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest2;
 import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
@@ -92,12 +93,12 @@ public class CreatorController {
                 .body(imageData);
     }
 
-//    @PostMapping("/create2")
-//    @PreAuthorize("hasAuthority('creator:create')")
-//    public ResponseEntity<CreateArtworkResponse> createArtwork2(@RequestBody CreateArtworkRequest request) {
-//        CreateArtworkResponse response = artworkService.createArtwork2(request);
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/create3")
+    @PreAuthorize("hasAuthority('creator:create')")
+    public ResponseEntity<CreateArtworkResponse> createArtwork2(@RequestBody CreateArtworkRequest2 request) {
+        CreateArtworkResponse response = artworkService.createArtwork3(request);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/create2")
     @PreAuthorize("hasAuthority('creator:create')")
@@ -113,4 +114,6 @@ public class CreatorController {
         CreateArtworkResponse response = artworkService.createArtwork2(request, file);
         return ResponseEntity.ok(response);
     }
+
+
 }

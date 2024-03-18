@@ -28,7 +28,7 @@ public class Artwork {
 //    @Column(name = "ArtworkUrl", length = 1000)
 //    private byte[] artworkUrl;
 
-    @Column(name = "ArtworkUrl", length = 1000)
+    @Column(name = "ArtworkUrl", length = Integer.MAX_VALUE)
     private String artworkUrl;
 
 

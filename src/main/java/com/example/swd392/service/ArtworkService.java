@@ -1,6 +1,7 @@
 package com.example.swd392.service;
 
 import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest;
+import com.example.swd392.Request.ArtworkRequest.CreateArtworkRequest2;
 import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
@@ -19,7 +20,7 @@ import java.util.List;
 public interface ArtworkService {
     public List<Artwork> getListArtworkForGuest(int count);
     public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException;
-
+    public CreateArtworkResponse createArtwork3(CreateArtworkRequest2 request);
     DeleteArtworkResponse deleteArtwork(int artworkId);
 
     public CreateArtworkResponse updateArtwork(int artworkId,UpdateArtworkRequest request);
