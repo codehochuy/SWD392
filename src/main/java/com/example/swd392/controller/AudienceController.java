@@ -366,4 +366,11 @@ public class AudienceController {
 
 
 
+    @GetMapping("/comments/artwork/{artworkId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public ResponseEntity<List<Comment>> getAllCommentsByArtworkId(@PathVariable int artworkId) {
+        List<Comment> comments = commentService.getAllCommentsByArtworkId(artworkId);
+        return ResponseEntity.ok(comments);
+    }
+
 }
