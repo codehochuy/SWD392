@@ -21,5 +21,5 @@ public interface OrderService {
     ResponseEntity<OrderResponse> deleteOrder(int orderId);
     ResponseEntity<OrderResponse> searchOrders(LocalDate fromDate, LocalDate toDate);
     public CreateOrderResponse createOrder(CreateOrderRequest request);
-    Optional<Order> getOrdersByAudience(User audience);
+    List<Order> getOrdersByAudience(User audience);
 }
