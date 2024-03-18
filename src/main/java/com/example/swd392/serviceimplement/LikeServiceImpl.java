@@ -66,7 +66,8 @@ public class LikeServiceImpl implements LikeService {
 
             // Lưu đối tượng vào cơ sở dữ liệu
             Like savedLike = likeRepository.save(like);
-
+            Artwork artwork1 = new Artwork();
+            artwork1.setLikeCount(+1);
             // Tạo response
             return ResponseEntity.ok(new CreateLikeResponse("Success", "Create like success", savedLike));
         } catch (Exception e) {
