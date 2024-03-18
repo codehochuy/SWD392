@@ -3,7 +3,9 @@ package com.example.swd392.serviceimplement;
 import com.example.swd392.Request.CommentRequest.CreateCommentRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.enums.Role;
+import com.example.swd392.model.Artwork;
 import com.example.swd392.model.Comment;
+import com.example.swd392.model.User;
 import com.example.swd392.repository.ArtworkRepo;
 import com.example.swd392.repository.CommentRepository;
 import com.example.swd392.repository.UserRepo;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,41 +35,38 @@ public class CommentServiceImplement implements CommentService {
 
     @Override
     public ResponseEntity<ResponseObject> createComment(CreateCommentRequest createCommentRequest) {
-        int userid = createCommentRequest.getUserId();
-        int artworkId = createCommentRequest.getArtworkId();
-        var user = userRepo.findUserByUsersID(userid).orElse(null);
-        var artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
-        if (user != null &&(user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)) {
-            if (artwork != null) {
-                Comment comment = new Comment();
-                comment.setCommentText(createCommentRequest.getCommentText());
-                comment.setCommentedAt(new Date());
-                comment.setUser(user);
-                Comment savedComment = commentRepository.save(comment);
-                return ResponseEntity.ok(new
-                        ResponseObject(
-                        "Success",
-                        "Create comment success",
-                        savedComment));
+        try {
+            int userId = createCommentRequest.getUserId();
+            int artworkId = createCommentRequest.getArtworkId();
 
-            }else {
-                return ResponseEntity.ok(new
-                        ResponseObject(
-                        "Fail",
-                        "Create comment fail",
-                        null));
-
+            // Kiểm tra xem người dùng và artwork có tồn tại không
+            User user = userRepo.findUserByUsersID(userId).orElse(null);
+            Artwork artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
+            if (user == null || artwork == null) {
+                return ResponseEntity.ok(new ResponseObject("Fail", "User or artwork not found", null));
             }
 
-        }else {
-            return ResponseEntity.ok(new
-                    ResponseObject(
-                    "Fail",
-                    "User not found",
-                    null));
-        }
+            // Kiểm tra vai trò của người dùng
+            if (user.getRole() != Role.AUDIENCE && user.getRole() != Role.CREATOR) {
+                return ResponseEntity.ok(new ResponseObject("Fail", "User does not have permission to create comment", null));
+            }
 
+            // Tạo mới một comment và thiết lập thông tin
+            Comment comment = new Comment();
+            comment.setCommentText(createCommentRequest.getCommentText());
+            comment.setCommentedAt(new Date());
+            comment.setUser(user);
+            comment.setArtwork(artwork); // Đặt artwork cho comment
+
+            // Lưu comment vào cơ sở dữ liệu
+            Comment savedComment = commentRepository.save(comment);
+
+            return ResponseEntity.ok(new ResponseObject("Success", "Create comment success", savedComment));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
+        }
     }
+
 
     @Override
     public ResponseEntity<ResponseObject> updateComment(Integer commentId, CreateCommentRequest createCommentRequest) {
@@ -130,6 +130,21 @@ public class CommentServiceImplement implements CommentService {
             return commentRepository.findAll();
         }
     }
+
+    @Override
+    public List<Comment> getAllCommentsByArtworkId(int artworkId) {
+        // Gọi phương thức trong repository để lấy tất cả các comment dựa trên Artwork ID
+        List<Comment> comments = commentRepository.findByArtwork_ArtworkId(artworkId);
+
+        // Kiểm tra nếu không có comment nào được tìm thấy, trả về null hoặc danh sách trống
+        if (comments == null || comments.isEmpty()) {
+            return Collections.emptyList(); // hoặc trả về null tùy thuộc vào yêu cầu
+        }
+
+        return comments;
+    }
+
+
 }
 
 

@@ -144,7 +144,7 @@ public class ArtworkServiceImplement implements ArtworkService {
         try {
             Artwork artwork = artworkRepo.findById(artworkId).orElse(null);
             if (artwork == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
             return ResponseEntity.ok(new ResponseObject("Success", "Find blog success", artwork));
         } catch (Exception e) {

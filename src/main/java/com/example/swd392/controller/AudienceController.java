@@ -354,4 +354,11 @@ public class AudienceController {
         return orderDetailService.getOrderDetailsByOrderId(orderId);
     }
 
+    @GetMapping("/comments/artwork/{artworkId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public ResponseEntity<List<Comment>> getAllCommentsByArtworkId(@PathVariable int artworkId) {
+        List<Comment> comments = commentService.getAllCommentsByArtworkId(artworkId);
+        return ResponseEntity.ok(comments);
+    }
+
 }
