@@ -290,7 +290,7 @@ public class ArtworkServiceImplement implements ArtworkService {
     @Override
     public List<Artwork> getArtWorkByCreatorId(int id) {
         var user = userRepo.findByUsersID(id).orElse(null);
-        if (user != null) {
+        if (user != null && user.getRole()==Role.CREATOR) {
             return artworkRepo.findByUser(user);
         } else {
             return  null;
