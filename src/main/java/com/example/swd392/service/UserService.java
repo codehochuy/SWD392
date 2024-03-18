@@ -5,10 +5,7 @@ import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
-import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
-import com.example.swd392.Response.UserResponse.CreateUserResponse;
-import com.example.swd392.Response.UserResponse.ResponseUser;
-import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.Response.UserResponse.*;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.model.User;
 import org.springframework.http.ResponseEntity;
@@ -47,4 +44,6 @@ public interface UserService {
     User saveUserForMail(User user);
 
     User getUserById(int audienceId);
+
+    UpdateUserResponse updateAccountBalance(int userid ,BalanceRequest request);
 }

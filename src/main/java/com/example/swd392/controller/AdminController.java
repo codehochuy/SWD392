@@ -6,6 +6,7 @@ import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
 import com.example.swd392.Response.OrderResponse.OrderResponse;
+import com.example.swd392.Response.UserResponse.BalanceRequest;
 import com.example.swd392.Response.UserResponse.ResponseUser;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.Package;
@@ -141,6 +142,21 @@ public class AdminController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
         return iorderService.searchOrders(fromDate, toDate);
+    }
+
+    @PutMapping("/{userId}/balance")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<UpdateUserResponse> updateAccountBalance(
+            @PathVariable("userId") int userId,
+            @RequestBody BalanceRequest request) {
+
+        UpdateUserResponse response = iUserService.updateAccountBalance(userId, request);
+
+        if (response.getUser() != null) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

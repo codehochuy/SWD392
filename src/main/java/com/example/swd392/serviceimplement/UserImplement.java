@@ -4,10 +4,7 @@ import com.example.swd392.Request.UserRequest.CreatUserRequest;
 import com.example.swd392.Request.UserRequest.SearchRequest;
 import com.example.swd392.Request.UserRequest.UpdateUserRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
-import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
-import com.example.swd392.Response.UserResponse.CreateUserResponse;
-import com.example.swd392.Response.UserResponse.ResponseUser;
-import com.example.swd392.Response.UserResponse.UpdateUserResponse;
+import com.example.swd392.Response.UserResponse.*;
 import com.example.swd392.Util.ImageUtil;
 import com.example.swd392.auth.AuthenticationResponse;
 import com.example.swd392.auth.RegisterRequest;
@@ -113,7 +110,25 @@ public class UserImplement implements UserService {
         return userOptional.orElse(null);
     }
 
-
+    @Override
+    public UpdateUserResponse updateAccountBalance(int userid,BalanceRequest request) {
+        double money = request.getMoney();
+        var user = userRepo.findByUsersID(userid).orElse(null);
+        if(user != null){
+            user.setAccountBalance(user.getAccountBalance()+ money);
+            userRepo.save(user);
+            return UpdateUserResponse.builder()
+                    .status("Update Account balance successful")
+                    .user(user)
+                    .build();
+        }else
+        {
+            return UpdateUserResponse.builder()
+                    .status("User not found")
+                    .user(null)
+                    .build();
+        }
+    }
 
 
     @Override
