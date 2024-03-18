@@ -50,6 +50,9 @@ public class User implements UserDetails {
     @Column(name = "UserStatus")
     private boolean userStatus;
 
+    @Column(name = "Account_balance")
+    private double accountBalance;
+
 
 
     @Enumerated(EnumType.STRING)

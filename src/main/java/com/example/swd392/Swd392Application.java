@@ -64,6 +64,7 @@ public class Swd392Application {
 					.password("123")
 					.phone("0326514968")
 					.status(true)
+					.accountBalance(0)
 					.role(SUPER_ADMIN)
 					.build();
 			System.out.println("Super_Admin token :"+ service.register(super_admin).getAccessToken());
@@ -75,6 +76,7 @@ public class Swd392Application {
 					.password("123")
 					.phone("0392272536")
 					.status(true)
+					.accountBalance(0)
 					.role(ADMIN)
 					.build();
 			System.out.println("Admin token :"+ service.register(admin).getAccessToken());
@@ -86,6 +88,7 @@ public class Swd392Application {
 					.status(true)
 					.password("123")
 					.phone("0854512367")
+					.accountBalance(0)
 					.role(AUDIENCE)
 					.build();
 			System.out.println("Audience token :"+ service.register(audience).getAccessToken());
@@ -96,6 +99,7 @@ public class Swd392Application {
 					.status(true)
 					.password("123")
 					.phone("0326514875")
+					.accountBalance(0)
 					.role(CREATOR)
 					.build();
 			System.out.println("Creator token :"+ service.register(creator).getAccessToken());
@@ -107,6 +111,7 @@ public class Swd392Application {
 					.status(true)
 					.password("123")
 					.phone("0369587452")
+					.accountBalance(0)
 					.role(GUEST)
 					.build();
 			guest = RegisterRequest.builder()
@@ -117,6 +122,7 @@ public class Swd392Application {
 					.password("123")
 					.phone("0369587452")
 					.role(GUEST)
+					.accountBalance(0)
 					.build();
 			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
 

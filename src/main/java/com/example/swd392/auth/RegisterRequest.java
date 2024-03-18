@@ -19,6 +19,7 @@ public class RegisterRequest {
     private String phone;
     private boolean status;
     private Role role;
+    private double accountBalance;
 
 
 
