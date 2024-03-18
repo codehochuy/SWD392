@@ -38,32 +38,42 @@ public class CommentServiceImplement implements CommentService {
         try {
             int userId = createCommentRequest.getUserId();
             int artworkId = createCommentRequest.getArtworkId();
-
-            // Kiểm tra xem người dùng và artwork có tồn tại không
             User user = userRepo.findUserByUsersID(userId).orElse(null);
             Artwork artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
             if (user == null || artwork == null) {
-                return ResponseEntity.ok(new ResponseObject("Fail", "User or artwork not found", null));
+                return ResponseEntity.ok(new ResponseObject(
+                        "Fail",
+                        "User or artwork not found",
+                        null));
             }
 
-            // Kiểm tra vai trò của người dùng
+
             if (user.getRole() != Role.AUDIENCE && user.getRole() != Role.CREATOR) {
-                return ResponseEntity.ok(new ResponseObject("Fail", "User does not have permission to create comment", null));
+                return ResponseEntity.ok(new ResponseObject(
+                        "Fail",
+                        "User does not have permission to create comment",
+                        null));
             }
 
-            // Tạo mới một comment và thiết lập thông tin
+
             Comment comment = new Comment();
             comment.setCommentText(createCommentRequest.getCommentText());
             comment.setCommentedAt(new Date());
             comment.setUser(user);
-            comment.setArtwork(artwork); // Đặt artwork cho comment
+            comment.setArtwork(artwork);
 
-            // Lưu comment vào cơ sở dữ liệu
+
             Comment savedComment = commentRepository.save(comment);
 
-            return ResponseEntity.ok(new ResponseObject("Success", "Create comment success", savedComment));
+            return ResponseEntity.ok(new ResponseObject(
+                    "Success",
+                    "Create comment success",
+                    savedComment));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
+            return ResponseEntity.status(500).body(new ResponseObject(
+                    "Fail",
+                    "Internal Server Error",
+                    null));
         }
     }
 
@@ -73,7 +83,7 @@ public class CommentServiceImplement implements CommentService {
         try {
             Comment existingComment = commentRepository.findById(commentId).orElse(null);
             if (existingComment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
             existingComment.setCommentText(createCommentRequest.getCommentText());
             existingComment.setCommentedAt(new Date());
@@ -90,10 +100,10 @@ public class CommentServiceImplement implements CommentService {
         try {
             Comment comment = commentRepository.findById(commentId).orElse(null);
             if (comment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
             commentRepository.delete(comment);
-            return ResponseEntity.ok(new ResponseObject("Success", "Delete blog success", null));
+            return ResponseEntity.ok(new ResponseObject("Success", "Delete Comment success", null));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
@@ -104,9 +114,9 @@ public class CommentServiceImplement implements CommentService {
         try {
             Comment comment = commentRepository.findById(commentId).orElse(null);
             if (comment == null) {
-                // Xử lý trường hợp không tìm thấy blog
+
             }
-            return ResponseEntity.ok(new ResponseObject("Success", "Find blog success", comment));
+            return ResponseEntity.ok(new ResponseObject("Success", "Find Comment success", comment));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ResponseObject("Fail", "Internal Server Error", null));
         }
@@ -133,14 +143,10 @@ public class CommentServiceImplement implements CommentService {
 
     @Override
     public List<Comment> getAllCommentsByArtworkId(int artworkId) {
-        // Gọi phương thức trong repository để lấy tất cả các comment dựa trên Artwork ID
         List<Comment> comments = commentRepository.findByArtwork_ArtworkId(artworkId);
-
-        // Kiểm tra nếu không có comment nào được tìm thấy, trả về null hoặc danh sách trống
         if (comments == null || comments.isEmpty()) {
-            return Collections.emptyList(); // hoặc trả về null tùy thuộc vào yêu cầu
+            return Collections.emptyList();
         }
-
         return comments;
     }
 
