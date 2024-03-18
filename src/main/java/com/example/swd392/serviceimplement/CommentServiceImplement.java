@@ -2,6 +2,7 @@ package com.example.swd392.serviceimplement;
 
 import com.example.swd392.Request.CommentRequest.CreateCommentRequest;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.enums.Role;
 import com.example.swd392.model.Comment;
 import com.example.swd392.repository.ArtworkRepo;
 import com.example.swd392.repository.CommentRepository;
@@ -31,18 +32,41 @@ public class CommentServiceImplement implements CommentService {
 
     @Override
     public ResponseEntity<ResponseObject> createComment(CreateCommentRequest createCommentRequest) {
-        Comment comment = new Comment();
-        comment.setCommentText(createCommentRequest.getCommentText());
-        comment.setCommentedAt(new Date());
+        int userid = createCommentRequest.getUserId();
+        int artworkId = createCommentRequest.getArtworkId();
+        var user = userRepo.findUserByUsersID(userid).orElse(null);
+        var artwork = artworkRepo.findByArtworkId(artworkId).orElse(null);
+        if (user != null &&(user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)) {
+            if (artwork != null) {
+                Comment comment = new Comment();
+                comment.setCommentText(createCommentRequest.getCommentText());
+                comment.setCommentedAt(new Date());
+                comment.setUser(user);
+                Comment savedComment = commentRepository.save(comment);
+                return ResponseEntity.ok(new
+                        ResponseObject(
+                        "Success",
+                        "Create comment success",
+                        savedComment));
 
+            }else {
+                return ResponseEntity.ok(new
+                        ResponseObject(
+                        "Fail",
+                        "Create comment fail",
+                        null));
 
+            }
 
-        Comment savedComment = commentRepository.save(comment);
+        }else {
+            return ResponseEntity.ok(new
+                    ResponseObject(
+                    "Fail",
+                    "User not found",
+                    null));
+        }
 
-
-        return ResponseEntity.ok(new ResponseObject("Success", "Create comment success", savedComment));
-
-}
+    }
 
     @Override
     public ResponseEntity<ResponseObject> updateComment(Integer commentId, CreateCommentRequest createCommentRequest) {

@@ -171,6 +171,7 @@ public class AudienceController {
     }
 
     @PostMapping("/createComment")
+    @PreAuthorize("hasAuthority('audience:create')")
     public ResponseEntity<ResponseObject> createComment(@RequestBody CreateCommentRequest createCommentRequest) {
         return commentService.createComment(createCommentRequest);
 
