@@ -130,6 +130,26 @@ public class UserImplement implements UserService {
         }
     }
 
+    @Override
+    public UpdateUserResponse ReduceAccountBalance(int userid, BalanceRequest request) {
+        double money = request.getMoney();
+        var user = userRepo.findByUsersID(userid).orElse(null);
+        if(user != null){
+            user.setAccountBalance(user.getAccountBalance()- money);
+            userRepo.save(user);
+            return UpdateUserResponse.builder()
+                    .status("Update Account balance successful")
+                    .user(user)
+                    .build();
+        }else
+        {
+            return UpdateUserResponse.builder()
+                    .status("User not found")
+                    .user(null)
+                    .build();
+        }
+    }
+
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {
