@@ -173,7 +173,7 @@ public class AdminController {
     }
 
     @GetMapping("/allUser")
-    @PreAuthorize("hasAuthority('audience:read')")
+    @PreAuthorize("hasAuthority('admin:read')")
     public List<User> getAllUsers() {
         return iUserService.getAll();
     }
