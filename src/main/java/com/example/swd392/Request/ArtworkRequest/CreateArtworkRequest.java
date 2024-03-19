@@ -1,6 +1,5 @@
 package com.example.swd392.Request.ArtworkRequest;
 
-import com.example.swd392.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
