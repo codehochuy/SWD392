@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserImplement implements UserService {
@@ -32,7 +33,10 @@ public class UserImplement implements UserService {
 
     @Override
     public List<User> getAll() {
-        return userRepo.findAll();
+        List<User> allUsers = userRepo.findAll();
+        return allUsers.stream()
+                .filter(user -> user.getRole() == Role.AUDIENCE || user.getRole() == Role.CREATOR)
+                .collect(Collectors.toList());
     }
 
     @Override
