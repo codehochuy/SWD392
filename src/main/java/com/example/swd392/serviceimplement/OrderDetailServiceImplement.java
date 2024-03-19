@@ -5,6 +5,7 @@ import com.example.swd392.Response.OrderDetailResponse.CreateOrderDetailResponse
 import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
 import com.example.swd392.model.Cart;
 import com.example.swd392.model.OrderDetail;
+import com.example.swd392.model.User;
 import com.example.swd392.repository.CartRepo;
 import com.example.swd392.repository.OrderDetailRepo;
 import com.example.swd392.repository.OrderRepo;
@@ -58,6 +59,9 @@ public class OrderDetailServiceImplement implements OrderDetailService {
                                 .build();
                         orderDetailRepo.save(orderDetail);
                         cartRepository.delete(cartItem);
+                        User creator = orderDetail.getArtwork().getUser();
+                        creator.setAccountBalance(creator.getAccountBalance()+orderDetail.getOrderDetailPrice());
+                        userRepo.save(creator);
                     }
                     return CreateOrderDetailResponse.builder()
                             .status("Create order detail successful")

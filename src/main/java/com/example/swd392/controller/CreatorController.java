@@ -80,6 +80,17 @@ public class CreatorController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/artworks/{creatorId}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public ResponseEntity<List<Artwork>> getArtworksByCreatorId(@PathVariable int creatorId) {
+        List<Artwork> artworks = artworkService.getArtWorkByCreatorId(creatorId);
+        if (artworks != null && !artworks.isEmpty()) {
+            return ResponseEntity.ok(artworks);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 
