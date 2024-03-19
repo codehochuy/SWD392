@@ -29,6 +29,7 @@ import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequest
 import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestResponse;
 import com.example.swd392.Response.PreorderResponseResponse.CreatePreorderResponseResponse;
+import com.example.swd392.Response.UserResponse.BalanceRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
 import com.example.swd392.model.*;
@@ -371,6 +372,21 @@ public class AudienceController {
     public ResponseEntity<List<Comment>> getAllCommentsByArtworkId(@PathVariable int artworkId) {
         List<Comment> comments = commentService.getAllCommentsByArtworkId(artworkId);
         return ResponseEntity.ok(comments);
+    }
+
+    @PutMapping("/{userId}/balance")
+    @PreAuthorize("hasAuthority('audience:update')")
+    public ResponseEntity<UpdateUserResponse> updateAccountBalance(
+            @PathVariable("userId") int userId,
+            @RequestBody BalanceRequest request) {
+
+        UpdateUserResponse response = iUserService.updateAccountBalance(userId, request);
+
+        if (response.getUser() != null) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
