@@ -73,6 +73,7 @@ public class ArtworkServiceImplement implements ArtworkService {
         if (artWork != null) {
             artWork.setArtworkName(name);
             artWork.setPrice(price);
+            artworkRepo.save(artWork);
             return CreateArtworkResponse.builder()
                     .status("Update ArtWork Successfully")
                     .artwork(artWork).build();
