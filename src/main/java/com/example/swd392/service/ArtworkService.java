@@ -19,8 +19,8 @@ import java.util.List;
 
 public interface ArtworkService {
     public List<Artwork> getListArtworkForGuest(int count);
-    public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException;
-    public CreateArtworkResponse createArtwork3(CreateArtworkRequest2 request);
+//    public CreateArtworkResponse createArtwork(CreateArtworkRequest request, MultipartFile file) throws IOException;
+//    public CreateArtworkResponse createArtwork3(CreateArtworkRequest2 request);
     DeleteArtworkResponse deleteArtwork(int artworkId);
 
     public CreateArtworkResponse updateArtwork(int artworkId,UpdateArtworkRequest request);
@@ -32,7 +32,7 @@ public interface ArtworkService {
     List<Artwork> findArtworksByFilter(String artworkName,  double price);
     public byte[] downloadImage(int fileName);
 
-    public CreateArtworkResponse createArtwork2(CreateArtworkRequest request,MultipartFile file);
+    public CreateArtworkResponse createArtwork(CreateArtworkRequest request);
 
     List<Artwork> getArtWorkByCreatorId(int id);
 }
