@@ -171,6 +171,12 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/allUser")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public List<User> getAllUsers() {
+        return iUserService.getAll();
+    }
 }
 
 
