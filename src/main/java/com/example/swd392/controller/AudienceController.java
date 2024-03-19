@@ -321,6 +321,7 @@ public class AudienceController {
 
     }
     @GetMapping("/getAllArtWork")
+    @PreAuthorize("hasAuthority('audience:read')")
     public ResponseEntity<List<Artwork>> getAllArtwork() {
         List<Artwork> artworks = artworkService.getAllArtworks();
         return ResponseEntity.ok(artworks);
