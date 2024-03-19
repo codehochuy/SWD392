@@ -14,5 +14,5 @@ public class CreateArtworkRequest {
     private String artworkName;
     private double price;
     private int creator;
-//    private String url;
+    private String url;
 }
