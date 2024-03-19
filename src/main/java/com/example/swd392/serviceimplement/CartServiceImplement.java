@@ -39,26 +39,33 @@ public class CartServiceImplement implements CartService {
             return CartResponse.builder()
                     .status("Artwork not found !")
                     .build();
-        }
-        else if(user != null && (user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)){
-            Optional<Cart> existingCart = cartRepo.findByUserAndArtwork(user, artWork);
-            if (existingCart.isPresent()) {
+        } else if (user != null && (user.getRole() == Role.AUDIENCE || user.getRole() == Role.CREATOR)) {
+            if (user.getUsersID() == artWork.getUser().getUsersID()) {
                 return CartResponse.builder()
-                        .status("This artwork is already in the cart.")
+                        .status("You can not buy your artwork")
                         .build();
-            } else {
-                // Nếu chưa tồn tại, thêm vào giỏ hàng
-                Cart cart = new Cart();
-                cart.setUser(user);
-                cart.setArtwork(artWork);
-                cartRepo.save(cart);
 
-                return CartResponse.builder()
-                        .status("Add to cart successfully")
-                        .build();
+            } else {
+                Optional<Cart> existingCart = cartRepo.findByUserAndArtwork(user, artWork);
+                if (existingCart.isPresent()) {
+                    return CartResponse.builder()
+                            .status("This artwork is already in the cart.")
+                            .build();
+                } else {
+                    // Nếu chưa tồn tại, thêm vào giỏ hàng
+                    Cart cart = new Cart();
+                    cart.setUser(user);
+                    cart.setArtwork(artWork);
+                    cartRepo.save(cart);
+
+                    return CartResponse.builder()
+                            .status("Add to cart successfully")
+                            .build();
+                }
             }
 
-        }else {
+
+        } else {
             return CartResponse.builder()
                     .status("Add to cart fail")
                     .build();
@@ -68,12 +75,12 @@ public class CartServiceImplement implements CartService {
 
     @Override
     public CartResponse removeCart(int cartId) {
-        if(cartRepo.existsById(cartId)){
+        if (cartRepo.existsById(cartId)) {
             cartRepo.deleteById(cartId);
-            return  CartResponse.builder()
+            return CartResponse.builder()
                     .status("Item removed from cart successfully").build();
-        }else {
-            return  CartResponse.builder()
+        } else {
+            return CartResponse.builder()
                     .status("Item does not exist").build();
         }
 
@@ -82,9 +89,9 @@ public class CartServiceImplement implements CartService {
     @Override
     public List<Cart> viewCartByUserId(int userId) {
         var user = userRepo.findUserByUsersID(userId).orElse(null);
-        if(user != null && (user.getRole()== Role.AUDIENCE || user.getRole()==Role.CREATOR)) {
+        if (user != null && (user.getRole() == Role.AUDIENCE || user.getRole() == Role.CREATOR)) {
             return cartRepo.findByUser(user);
-        }else {
+        } else {
             return null;
         }
     }
