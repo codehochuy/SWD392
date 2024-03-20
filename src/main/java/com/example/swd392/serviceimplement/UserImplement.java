@@ -224,8 +224,48 @@ public class UserImplement implements UserService {
     }
 
     @Override
+    public UpdateUserResponse banUserByID(int userID) {
+        var banUser = userRepo.findUserByUsersID(userID).orElse(null);
+//        var banUser = userRepo.findUserByUsersID(userID).orElse(null);
+        if (banUser != null) {
+            banUser.setUserStatus(false);
+            userRepo.save(banUser);
+            return UpdateUserResponse.builder()
+                    .status("Ban User Successful")
+                    .user(banUser)
+                    .build();
+        } else {
+            return UpdateUserResponse.builder()
+                    .status("User Not Found")
+                    .user(null)
+                    .build();
+
+        }
+    }
+
+    @Override
     public UpdateUserResponse unbanUser(String email) {
         var unbanUser = userRepo.findUserByEmail(email).orElse(null);
+//        var unbanUser = userRepo.findUserByUsersID(userID).orElse(null);
+        if (unbanUser != null) {
+            unbanUser.setUserStatus(true);
+            userRepo.save(unbanUser);
+            return UpdateUserResponse.builder()
+                    .status("UnBan User Successful")
+                    .user(unbanUser)
+                    .build();
+        } else {
+            return UpdateUserResponse.builder()
+                    .status("User Not Found")
+                    .user(null)
+                    .build();
+
+        }
+    }
+
+    @Override
+    public UpdateUserResponse unbanUserByID(int userID) {
+        var unbanUser = userRepo.findUserByUsersID(userID).orElse(null);
 //        var unbanUser = userRepo.findUserByUsersID(userID).orElse(null);
         if (unbanUser != null) {
             unbanUser.setUserStatus(true);

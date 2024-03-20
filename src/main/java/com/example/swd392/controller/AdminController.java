@@ -56,6 +56,17 @@ public class AdminController {
         }
     }
 
+    @PutMapping("/banUser/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<UpdateUserResponse> banUserByID(@PathVariable int id) {
+        UpdateUserResponse response = iUserService.banUserByID(id);
+        if (response.getUser() != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
     @PutMapping("/unban/{email}")
     @PreAuthorize("hasAuthority('admin:update')")
     public ResponseEntity<UpdateUserResponse> unbanUser(@PathVariable String email) {
@@ -66,6 +77,17 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+    @PutMapping("/unbanUser/{id}")
+    @PreAuthorize("hasAuthority('admin:update')")
+    public ResponseEntity<UpdateUserResponse> unbanUser(@PathVariable int id) {
+        UpdateUserResponse response = iUserService.unbanUserByID(id);
+        if (response.getUser() != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
 
     @GetMapping("/creators")
     public List<User> getCreators() {

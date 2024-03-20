@@ -24,7 +24,9 @@ public interface UserService {
     public byte[] downloadImage(String fileName);
 
     public UpdateUserResponse banUser(String email);
+    public UpdateUserResponse banUserByID(int userID);
     public UpdateUserResponse unbanUser(String email);
+    public UpdateUserResponse unbanUserByID(int userID);
 
     public List<User> getCreator();
 
