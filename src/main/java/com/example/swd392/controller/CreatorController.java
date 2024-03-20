@@ -5,6 +5,7 @@ import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.UserResponse.ArtworkOrderDetailDTO;
 import com.example.swd392.Response.UserResponse.BalanceAccountResponse;
 import com.example.swd392.model.Artwork;
 import com.example.swd392.service.ArtworkService;
@@ -92,10 +93,10 @@ public class CreatorController {
         }
     }
 
-    @GetMapping("/orders/{orderId}")
+    @GetMapping("/historyBuyOf/{artworkID}")
     @PreAuthorize("hasAuthority('creator:read')")
-    public List<Artwork> getArtworksSoldByUser(@PathVariable int orderId) {
-        return artworkService.getArtworksSoldByUser(orderId);
+    public List<ArtworkOrderDetailDTO> getOrderDetailsByArtworkID(@PathVariable int artworkID) {
+        return artworkService.getOrderDetailsByArtworkID(artworkID);
     }
 
 

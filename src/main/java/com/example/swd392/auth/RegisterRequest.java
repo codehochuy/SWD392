@@ -19,8 +19,10 @@ public class RegisterRequest {
     private String phone;
     private boolean status;
     private Role role;
-    private double accountBalance;
+    private Double account_balance;
 
-
+    public void setAccount_balance(Double account_balance) {
+        this.account_balance = account_balance;
+    }
 
 }

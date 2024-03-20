@@ -5,6 +5,7 @@ import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.UserResponse.ArtworkOrderDetailDTO;
 import com.example.swd392.model.Artwork;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,5 +26,5 @@ public interface ArtworkService {
     public byte[] downloadImage(int fileName);
     List<Artwork> getArtWorkByCreatorId(int id);
 
-    List<Artwork> getArtworksSoldByUser(int orderId);
+    public List<ArtworkOrderDetailDTO> getOrderDetailsByArtworkID(int artworkID);
 }

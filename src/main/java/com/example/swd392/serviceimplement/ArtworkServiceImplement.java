@@ -8,6 +8,7 @@ import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.UserResponse.ArtworkOrderDetailDTO;
 import com.example.swd392.Util.CustomMultipartFile;
 import com.example.swd392.enums.Role;
 import com.example.swd392.model.Artwork;
@@ -21,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -207,8 +210,33 @@ public class ArtworkServiceImplement implements ArtworkService {
     }
 
     @Override
-    public List<Artwork> getArtworksSoldByUser(int orderId) {
-        return artworkRepo.findAllArtworkInOrderDetails();
+    public List<ArtworkOrderDetailDTO> getOrderDetailsByArtworkID(int artworkID) {
+        List<Object[]> resultList = artworkRepo.findOrderDetailsByArtworkID(artworkID);
+        List<ArtworkOrderDetailDTO> dtoList = new ArrayList<>();
+
+        for (Object[] result : resultList) {
+            int artworkId = (int) result[0];                   // artworkId
+            String artworkName = (String) result[1];           // artworkName
+            String artworkUrl = (String) result[2];            // artworkUrl
+            Timestamp timestamp = (Timestamp) result[3];      // postedAt as Timestamp
+            LocalDateTime postedAt = LocalDateTime.parse(timestamp.toString());  // Convert Timestamp to LocalDateTime
+            double price = (double) result[4];                 // price
+            int likeCount = (int) result[5];                   // likeCount
+            int commentCount = (int) result[6];                // commentCount
+            int buyCount = (int) result[7];                    // buyCount
+            int userId = (int) result[8];                      // userId
+            int orderDetailId = (int) result[9];               // orderDetailId
+
+            ArtworkOrderDetailDTO dto = new ArtworkOrderDetailDTO(
+                    artworkId, artworkName, artworkUrl, postedAt,
+                    price, likeCount, commentCount, buyCount,
+                    userId, orderDetailId
+            );
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
+
 
 }

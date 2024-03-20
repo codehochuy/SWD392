@@ -21,5 +21,21 @@ public interface ArtworkRepo extends JpaRepository<Artwork,Integer> {
 
     @Query("SELECT DISTINCT ad.artwork FROM OrderDetail ad")
     List<Artwork> findAllArtworkInOrderDetails();
+
+    @Query(value = "SELECT a.artworkid AS artworkId, " +
+            "a.artwork_name AS artworkName, " +
+            "a.artwork_url AS artworkUrl, " +
+            "a.posted_at AS postedAt, " +
+            "a.price, " +
+            "a.like_count AS likeCount, " +
+            "a.comment_count AS commentCount, " +
+            "a.buy_count AS buyCount, " +
+            "a.usersid AS userId, " +
+            "od.OrderdetailID AS orderDetailId " +
+            "FROM Artwork a " +
+            "JOIN OrderDetail od ON a.ArtworkID = od.ArtworkID " +
+            "WHERE a.ArtworkID = ?1", nativeQuery = true)
+    List<Object[]> findOrderDetailsByArtworkID(int artworkID);
+
 }
 
