@@ -5,6 +5,7 @@ import com.example.swd392.Request.ArtworkRequest.UpdateArtworkRequest;
 import com.example.swd392.Response.ArtworkResponse.CreateArtworkResponse;
 import com.example.swd392.Response.ArtworkResponse.DeleteArtworkResponse;
 import com.example.swd392.Response.ObjectResponse.ResponseObject;
+import com.example.swd392.Response.UserResponse.BalanceAccountResponse;
 import com.example.swd392.model.Artwork;
 import com.example.swd392.service.ArtworkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class CreatorController {
     }
 
     @GetMapping("/artworks/{creatorId}")
-    @PreAuthorize("hasAuthority('audience:read')")
+    @PreAuthorize("hasAuthority('creator:read')")
     public ResponseEntity<List<Artwork>> getArtworksByCreatorId(@PathVariable int creatorId) {
         List<Artwork> artworks = artworkService.getArtWorkByCreatorId(creatorId);
         if (artworks != null && !artworks.isEmpty()) {
@@ -89,6 +90,12 @@ public class CreatorController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/orders/{orderId}")
+    @PreAuthorize("hasAuthority('creator:read')")
+    public List<Artwork> getArtworksSoldByUser(@PathVariable int orderId) {
+        return artworkService.getArtworksSoldByUser(orderId);
     }
 
 

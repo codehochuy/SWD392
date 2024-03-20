@@ -18,5 +18,8 @@ public interface ArtworkRepo extends JpaRepository<Artwork,Integer> {
     List<Artwork> findArtworksByFilter(String artworkName, Double price);
 
     List<Artwork> findByUser(User user);
+
+    @Query("SELECT DISTINCT ad.artwork FROM OrderDetail ad")
+    List<Artwork> findAllArtworkInOrderDetails();
 }
 

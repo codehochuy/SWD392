@@ -3,13 +3,11 @@ package com.example.swd392.serviceimplement;
 import com.example.swd392.Request.OrderDetailRequest.CreateOrderDetailRequest;
 import com.example.swd392.Response.OrderDetailResponse.CreateOrderDetailResponse;
 import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
+import com.example.swd392.model.Artwork;
 import com.example.swd392.model.Cart;
 import com.example.swd392.model.OrderDetail;
 import com.example.swd392.model.User;
-import com.example.swd392.repository.CartRepo;
-import com.example.swd392.repository.OrderDetailRepo;
-import com.example.swd392.repository.OrderRepo;
-import com.example.swd392.repository.UserRepo;
+import com.example.swd392.repository.*;
 import com.example.swd392.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +27,8 @@ public class OrderDetailServiceImplement implements OrderDetailService {
     private UserRepo userRepo;
     @Autowired
     private OrderRepo orderRepo;
+    @Autowired
+    ArtworkRepo artworkRepo;
     @Override
     public ResponseEntity<OrderDetailResponse> getAllOrderDetails(int orderID) {
         List<OrderDetail> orderDetails = orderDetailRepo.findByOrder_OrderId(orderID);
@@ -58,6 +58,9 @@ public class OrderDetailServiceImplement implements OrderDetailService {
                                 .order(order)
                                 .build();
                         orderDetailRepo.save(orderDetail);
+                        Artwork artwork = cartItem.getArtwork();
+                        artwork.setBuyCount(cartItem.getArtwork().getBuyCount()+1);
+                        artworkRepo.save(artwork);
                         cartRepository.delete(cartItem);
                         User creator = orderDetail.getArtwork().getUser();
                         creator.setAccountBalance(creator.getAccountBalance()+orderDetail.getOrderDetailPrice());

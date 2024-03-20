@@ -88,43 +88,43 @@ public class Swd392Application {
 					.status(true)
 					.password("123")
 					.phone("0854512367")
-					.accountBalance(0)
+					.accountBalance(100000)
 					.role(AUDIENCE)
 					.build();
 			System.out.println("Audience token :"+ service.register(audience).getAccessToken());
 			var creator = RegisterRequest.builder()
-					.name("John")
+					.name("Huy")
 					.email("huypt160548@fpt.edu.vn")
 //					.avatar("huy.jpg")
 					.status(true)
 					.password("123")
 					.phone("0326514875")
-					.accountBalance(0)
+					.accountBalance(100000)
 					.role(CREATOR)
 					.build();
 			System.out.println("Creator token :"+ service.register(creator).getAccessToken());
 
-			var guest = RegisterRequest.builder()
-					.name("Trần Huy")
-					.email("huypt110402@gmail.com")
-//					.avatar("huy.jpg")
-					.status(true)
-					.password("123")
-					.phone("0369587452")
-					.accountBalance(0)
-					.role(GUEST)
-					.build();
-			guest = RegisterRequest.builder()
-					.name("Trần Huy")
-					.email("tuanpn12301@gmail.com")
-//					.avatar("huy.jpg")
-					.status(true)
-					.password("123")
-					.phone("0369587452")
-					.role(GUEST)
-					.accountBalance(0)
-					.build();
-			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
+//			var guest = RegisterRequest.builder()
+//					.name("Huy")
+//					.email("huypt110402@gmail.com")
+////					.avatar("huy.jpg")
+//					.status(true)
+//					.password("123")
+//					.phone("0369587452")
+//					.accountBalance(0)
+//					.role(GUEST)
+//					.build();
+//			guest = RegisterRequest.builder()
+//					.name("Trần Huy")
+//					.email("tuanpn12301@gmail.com")
+////					.avatar("huy.jpg")
+//					.status(true)
+//					.password("123")
+//					.phone("0369587452")
+//					.role(GUEST)
+//					.accountBalance(0)
+//					.build();
+//			System.out.println("Guest token :"+ service.register(guest).getAccessToken());
 
 			/*LocalDateTime postedAt = LocalDateTime.now();
 			var artwork = Artwork.builder()

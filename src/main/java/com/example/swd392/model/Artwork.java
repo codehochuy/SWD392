@@ -44,6 +44,9 @@ public class Artwork {
     @Column(name = "CommentCount")
     private int commentCount;
 
+    @Column(name = "BuyCount")
+    private int buyCount;
+
     @ManyToOne
 //    @JsonIgnore
     @JoinColumn(name = "UsersID")

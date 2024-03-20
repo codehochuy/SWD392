@@ -178,6 +178,7 @@ public class ArtworkServiceImplement implements ArtworkService {
                     .user(user)
                     .price(price)
                     .commentCount(0)
+                    .buyCount(0)
                     .likeCount(0)
                     .postedAt(LocalDateTime.now())
                     .build();
@@ -203,6 +204,11 @@ public class ArtworkServiceImplement implements ArtworkService {
         } else {
             return  null;
         }
+    }
+
+    @Override
+    public List<Artwork> getArtworksSoldByUser(int orderId) {
+        return artworkRepo.findAllArtworkInOrderDetails();
     }
 
 }
