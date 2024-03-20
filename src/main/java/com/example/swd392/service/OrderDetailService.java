@@ -13,5 +13,7 @@ public interface OrderDetailService {
     CreateOrderDetailResponse createOrderDetail(CreateOrderDetailRequest request);
     List<OrderDetail> getOrderDetailsByOrderId(int orderId);
 
-    List<OrderDetail> getOrderDetailByArtWorkID(int artWorkId);
+    List<OrderDetail> getOrderDetailByUser(int userid);
+
+    List<OrderDetail> getAll();
 }

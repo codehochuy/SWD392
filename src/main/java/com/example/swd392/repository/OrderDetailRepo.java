@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface OrderDetailRepo extends JpaRepository<OrderDetail,Integer> {
     List<OrderDetail> findByOrder_OrderId(int orderId);
     List<OrderDetail> findOrderDetailByOrder(Order order);
-    List<OrderDetail> findOrderDetailByArtwork(Artwork artwork);
 }

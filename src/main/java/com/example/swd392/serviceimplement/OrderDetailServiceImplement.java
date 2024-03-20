@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -30,6 +31,7 @@ public class OrderDetailServiceImplement implements OrderDetailService {
     private OrderRepo orderRepo;
     @Autowired
     ArtworkRepo artworkRepo;
+
     @Override
     public ResponseEntity<OrderDetailResponse> getAllOrderDetails(int orderID) {
         List<OrderDetail> orderDetails = orderDetailRepo.findByOrder_OrderId(orderID);
@@ -46,10 +48,10 @@ public class OrderDetailServiceImplement implements OrderDetailService {
     public CreateOrderDetailResponse createOrderDetail(CreateOrderDetailRequest request) {
         int orderId = request.getOrderId();
         var order = orderRepo.findOrderByOrderId(orderId).orElse(null);
-        if(order != null){
+        if (order != null) {
             int audience = request.getAudience();
             var user = userRepo.findUserByUsersID(audience).orElse(null);
-            if(user != null && user.getUsersID()==order.getAudience().getUsersID()){
+            if (user != null && user.getUsersID() == order.getAudience().getUsersID()) {
                 List<Cart> cartItems = cartRepository.findByUser(user);
                 if (!cartItems.isEmpty()) {
                     for (Cart cartItem : cartItems) {
@@ -60,29 +62,29 @@ public class OrderDetailServiceImplement implements OrderDetailService {
                                 .build();
                         orderDetailRepo.save(orderDetail);
                         Artwork artwork = cartItem.getArtwork();
-                        artwork.setBuyCount(cartItem.getArtwork().getBuyCount()+1);
+                        artwork.setBuyCount(cartItem.getArtwork().getBuyCount() + 1);
                         artworkRepo.save(artwork);
                         cartRepository.delete(cartItem);
                         User creator = orderDetail.getArtwork().getUser();
-                        creator.setAccountBalance(creator.getAccountBalance()+orderDetail.getOrderDetailPrice());
+                        creator.setAccountBalance(creator.getAccountBalance() + orderDetail.getOrderDetailPrice());
                         userRepo.save(creator);
                     }
                     return CreateOrderDetailResponse.builder()
                             .status("Create order detail successful")
                             .build();
-                }else {
+                } else {
                     return CreateOrderDetailResponse.builder()
                             .status("Cart is empty")
                             .build();
                 }
 
-            }else {
+            } else {
                 return CreateOrderDetailResponse.builder()
                         .status("User not found")
                         .build();
             }
 
-        }else{
+        } else {
             return CreateOrderDetailResponse.builder()
                     .status("Order not found")
                     .build();
@@ -92,23 +94,24 @@ public class OrderDetailServiceImplement implements OrderDetailService {
     @Override
     public List<OrderDetail> getOrderDetailsByOrderId(int orderId) {
         var order = orderRepo.findOrderByOrderId(orderId).orElse(null);
-        if(order != null){
+        if (order != null) {
             return orderDetailRepo.findOrderDetailByOrder(order);
-        }
-        else{
+        } else {
             return null;
         }
     }
 
     @Override
-    public List<OrderDetail> getOrderDetailByArtWorkID(int artWorkId) {
-        Optional<Artwork> artworkOptional = artworkRepo.findByArtworkId(artWorkId);
-        if (artworkOptional.isPresent()) {
-            Artwork artwork = artworkOptional.get();
-            return orderDetailRepo.findOrderDetailByArtwork(artwork);
-        } else {
-            // Handle case when artwork is not found
-            return Collections.emptyList(); // Or throw an exception
-        }
+    public List<OrderDetail> getOrderDetailByUser(int userid) {
+        List<OrderDetail> allOrderDetails = getAll();
+        return allOrderDetails.stream()
+                .filter(orderDetail -> orderDetail.getArtwork().getUser().getUsersID() == userid)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<OrderDetail> getAll() {
+        return orderDetailRepo.findAll();
     }
 }

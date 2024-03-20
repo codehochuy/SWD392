@@ -103,9 +103,14 @@ public class CreatorController {
         return artworkService.getOrderDetailsByArtworkID(artworkID);
     }
 
-    @GetMapping("/orderDetails/{artWorkId}")
-    public List<OrderDetail> getOrderDetailByArtWorkID(@PathVariable int artWorkId) {
-        return detailService.getOrderDetailByArtWorkID(artWorkId);
+    @GetMapping("/history/{userId}")
+    public ResponseEntity<List<OrderDetail>> getOrderDetailsByUser(@PathVariable int userId) {
+        List<OrderDetail> orderDetails = detailService.getOrderDetailByUser(userId);
+        if (!orderDetails.isEmpty()) {
+            return new ResponseEntity<>(orderDetails, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
