@@ -1,6 +1,7 @@
 package com.example.swd392.controller;
 
 import com.example.swd392.Request.UserRequest.CreatUserRequest;
+import com.example.swd392.Response.OrderDetailResponse.OrderDetailResponse;
 import com.example.swd392.Response.UserResponse.CreateUserResponse;
 import com.example.swd392.Response.UserResponse.RegisterResponse;
 import com.example.swd392.auth.AuthenticationRequest;
@@ -9,9 +10,11 @@ import com.example.swd392.auth.AuthenticationService;
 import com.example.swd392.auth.RegisterRequest;
 import com.example.swd392.config.LogoutService;
 import com.example.swd392.model.Artwork;
+import com.example.swd392.model.OrderDetail;
 import com.example.swd392.model.User;
 import com.example.swd392.service.ArtworkService;
 import com.example.swd392.service.EmailService;
+import com.example.swd392.service.OrderDetailService;
 import com.example.swd392.service.UserService;
 import com.sun.nio.sctp.NotificationHandler;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +45,8 @@ public class AuthenticationController {
     private  final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private  final ArtworkService artworkService;
+    @Autowired
+    private OrderDetailService orderDetailService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -104,5 +109,32 @@ public class AuthenticationController {
     public List<Artwork> getRandomArtworks() {
         int count = 10; // Set the count of artworks you want to fetch
         return artworkService.getListArtworkForGuest(count);
+    }
+    @PostMapping("/sendArtworkInfo/{orderId}")
+    public ResponseEntity<?> sendArtworkInfo(@PathVariable int orderId) {
+        try {
+            // Gọi dịch vụ để lấy thông tin chi tiết đơn hàng
+            OrderDetailResponse orderDetailResponse = orderDetailService.getAllOrderDetails(orderId).getBody();
+
+            // Kiểm tra xem danh sách chi tiết đơn hàng có rỗng không
+            if (orderDetailResponse != null && !orderDetailResponse.getOrderDetails().isEmpty()) {
+                // Lấy thông tin chi tiết đơn hàng đầu tiên
+                OrderDetail orderDetail = orderDetailResponse.getOrderDetails().get(0);
+                String artworkUrl = orderDetail.getArtwork().getArtworkUrl();
+                String audienceEmail = orderDetail.getOrder().getAudience().getEmail();
+
+                // Tạo nội dung email
+                String emailContent = "Artwork URL: " + artworkUrl ;
+
+                // Gửi email
+                emailService.sendSimpleMessage(audienceEmail, "Artwork Information", emailContent);
+
+                return ResponseEntity.ok("Email sent successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No data received from the API");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
     }
 }
