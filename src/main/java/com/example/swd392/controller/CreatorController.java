@@ -104,6 +104,7 @@ public class CreatorController {
     }
 
     @GetMapping("/history/{userId}")
+    @PreAuthorize("hasAuthority('creator:read')")
     public ResponseEntity<List<OrderDetail>> getOrderDetailsByUser(@PathVariable int userId) {
         List<OrderDetail> orderDetails = detailService.getOrderDetailByUser(userId);
         if (!orderDetails.isEmpty()) {
