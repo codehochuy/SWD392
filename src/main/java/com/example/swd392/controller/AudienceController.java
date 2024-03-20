@@ -29,6 +29,7 @@ import com.example.swd392.Response.PreorderRequestResponse.DeletePreorderRequest
 import com.example.swd392.Response.PreorderRequestResponse.FindPreorderRequestResponse;
 import com.example.swd392.Response.PreorderRequestResponse.ListPreorderRequestResponse;
 import com.example.swd392.Response.PreorderResponseResponse.CreatePreorderResponseResponse;
+import com.example.swd392.Response.UserResponse.BalanceAccountResponse;
 import com.example.swd392.Response.UserResponse.BalanceRequest;
 import com.example.swd392.Response.UserResponse.ChangeAvatarResponse;
 import com.example.swd392.Response.UserResponse.UpdateUserResponse;
@@ -62,7 +63,7 @@ public class AudienceController {
     private CartService iCartService;
 
     @Autowired
-    private  FollowerService followerService;
+    private FollowerService followerService;
 
     @Autowired
     private LikeService likeService;
@@ -76,10 +77,10 @@ public class AudienceController {
     @Autowired
     private PreorderRequestService preorderRequestService;
     @Autowired
-    private  PreorderResponseService preorderResponseService;
+    private PreorderResponseService preorderResponseService;
 
     @Autowired
-    private  CommentService commentService;
+    private CommentService commentService;
 
     @Autowired
     private PackageUserService packageUserService;
@@ -105,6 +106,7 @@ public class AudienceController {
 //        UpdateUserResponse response = iUserService.updateUser(email, updateUserRequest);
         return ResponseEntity.ok(iUserService.updateUser(email, updateUserRequest));
     }
+
     @PostMapping("/avatar/{email}")
     @PreAuthorize("hasAuthority('audience:create')")
     public ResponseEntity<ChangeAvatarResponse> changeAvatar(
@@ -116,9 +118,9 @@ public class AudienceController {
 
     @GetMapping("/{email}")
     @PreAuthorize("hasAuthority('audience:read')")
-    public ResponseEntity<?> downloadImage(@PathVariable String email){
+    public ResponseEntity<?> downloadImage(@PathVariable String email) {
         byte[] imageData = iUserService.downloadImage(email);
-        if(imageData == null){
+        if (imageData == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Avatar not found" + email);
         }
@@ -212,6 +214,7 @@ public class AudienceController {
         List<Comment> commentList = commentService.searchCommentsFilter(commentText, commentedAt);
         return ResponseEntity.ok(commentList);
     }
+
     @PostMapping("/createFollower")
     public ResponseEntity<CreateFollowerResponse> createFollower(@RequestBody CreateFollowerRequest followerRequest) {
         return followerService.createFollower(followerRequest);
@@ -248,11 +251,13 @@ public class AudienceController {
         List<Follower> followerList = followerService.searchFollowers(userId, accountName);
         return ResponseEntity.ok(followerList);
     }
+
     @PostMapping("/Like")
     @PreAuthorize("hasAuthority('audience:create')")
     public CreateLikeResponse createLike(@RequestBody CreateLikeRequest likeRequest) {
         return likeService.Like(likeRequest);
     }
+
     @DeleteMapping("/deleteLike/{likeId}")
     public ResponseEntity<DeleteLikeResponse> deleteLike(@PathVariable int likeId) {
         return likeService.deleteLike(likeId);
@@ -270,7 +275,7 @@ public class AudienceController {
 
     @GetMapping("/getallLikePagenable")
     public ResponseEntity<ListLikeResponse> findAllLikesPagenable(@RequestParam("page") Optional<Integer> page,
-                                                         @RequestParam("size") Optional<Integer> size) {
+                                                                  @RequestParam("size") Optional<Integer> size) {
         Pageable pageable = PageRequest.of(page.orElse(1) - 1, size.orElse(9));
         return likeService.findAllLikesPageNable(pageable);
     }
@@ -315,11 +320,13 @@ public class AudienceController {
     public ResponseEntity<CreatePreorderResponseResponse> createPreorderResponse(@RequestBody CreatePreorderResponseRequest request) {
         return preorderResponseService.createPreorderResponse(request);
     }
+
     @PostMapping("/CreatePakageUser")
     public ResponseEntity<CreatePackageUserResponse> createPackageUser(@RequestBody createPackageUserRequest request) {
         return packageUserService.createPackageUser(request);
 
     }
+
     @GetMapping("/getAllArtWork")
     @PreAuthorize("hasAuthority('audience:read')")
     public ResponseEntity<List<Artwork>> getAllArtwork() {
@@ -333,6 +340,7 @@ public class AudienceController {
         CreateOrderResponse response = orderService.createOrder(request);
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/createOrderDetail")
     @PreAuthorize("hasAuthority('audience:create')")
     public ResponseEntity<CreateOrderDetailResponse> createOrderDetail(@RequestBody CreateOrderDetailRequest request) {
@@ -350,11 +358,13 @@ public class AudienceController {
             return null;
         }
     }
+
     @GetMapping("/orderDetail/{orderId}")
     @PreAuthorize("hasAuthority('audience:read')")
     public List<OrderDetail> getOrderDetailsByOrderId(@PathVariable int orderId) {
         return orderDetailService.getOrderDetailsByOrderId(orderId);
     }
+
     @GetMapping("/artworks/{creatorId}")
     @PreAuthorize("hasAuthority('audience:read')")
     public ResponseEntity<List<Artwork>> getArtworksByCreatorId(@PathVariable int creatorId) {
@@ -365,7 +375,6 @@ public class AudienceController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
 
     @GetMapping("/comments/artwork/{artworkId}")
@@ -388,6 +397,13 @@ public class AudienceController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/balanceAccount/{userid}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public BalanceAccountResponse getBalanceAccount(@PathVariable int userid) {
+        BalanceAccountResponse response = iUserService.getBalanceAccount(userid);
+        return response;
     }
 
 }

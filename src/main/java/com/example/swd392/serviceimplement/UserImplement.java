@@ -154,6 +154,22 @@ public class UserImplement implements UserService {
         }
     }
 
+    @Override
+    public BalanceAccountResponse getBalanceAccount(int userid) {
+        var user = userRepo.findByUsersID(userid).orElse(null);
+        if(user != null &&(user.getRole() == Role.AUDIENCE || user.getRole() == Role.CREATOR)){
+            return BalanceAccountResponse.builder()
+                    .status("Your balance is :")
+                    .money(user.getAccountBalance())
+                    .build();
+        }
+        else {
+            return BalanceAccountResponse.builder()
+                    .status("User not found")
+                    .build();
+        }
+    }
+
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {

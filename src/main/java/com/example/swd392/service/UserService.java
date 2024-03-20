@@ -49,4 +49,6 @@ public interface UserService {
 
     UpdateUserResponse updateAccountBalance(int userid ,BalanceRequest request);
     UpdateUserResponse ReduceAccountBalance(int userid ,BalanceRequest request);
+
+    BalanceAccountResponse getBalanceAccount(int userid);
 }
