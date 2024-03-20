@@ -132,17 +132,24 @@ public class AuthenticationService {
                 )
         );
         var user = userRepo.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .status("Login successfully")
+        if(!user.isUserStatus()){
+            return AuthenticationResponse.builder()
+                    .status("User is ban")
+                    .build();
+        }else{
+            var jwtToken = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user, jwtToken);
+            return AuthenticationResponse.builder()
+                    .status("Login successfully")
 //                .userInfo(userRepo.findUserByEmail(request.getEmail()).orElseThrow())
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .userInfo(user)
-                .build();
+                    .accessToken(jwtToken)
+                    .refreshToken(refreshToken)
+                    .userInfo(user)
+                    .build();
+        }
+
     }
 
     public void refreshToken(
