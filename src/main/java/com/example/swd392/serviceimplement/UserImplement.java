@@ -170,6 +170,23 @@ public class UserImplement implements UserService {
         }
     }
 
+    @Override
+    public UserInfoResponse getUserInfo(int userid) {
+        var user = userRepo.findByUsersID(userid).orElse(null);
+        if(user != null){
+            return UserInfoResponse.builder()
+                    .status("Your information")
+                    .user(user)
+                    .build();
+        }
+        else {
+            return UserInfoResponse.builder()
+                    .status("User not found")
+                    .user(null)
+                    .build();
+        }
+    }
+
 
     @Override
     public UpdateUserResponse updateUser(String email, UpdateUserRequest updateUserRequest) {

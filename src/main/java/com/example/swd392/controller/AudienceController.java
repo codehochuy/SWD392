@@ -406,4 +406,11 @@ public class AudienceController {
         return response;
     }
 
+    @GetMapping("/userinfo/{userid}")
+    @PreAuthorize("hasAuthority('audience:read')")
+    public BalanceAccountResponse getUserInfo(@PathVariable int userid) {
+        BalanceAccountResponse user = iUserService.getBalanceAccount(userid);
+        return user;
+    }
+
 }
