@@ -15,7 +15,6 @@ public class ArtworkOrderDetailDTO {
     private int artworkId;
     private String artworkName;
     private String artworkUrl;
-    private LocalDateTime postedAt;
     private double price;
     private int likeCount;
     private int commentCount;

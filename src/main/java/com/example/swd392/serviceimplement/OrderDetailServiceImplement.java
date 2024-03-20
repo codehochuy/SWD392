@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,6 +97,18 @@ public class OrderDetailServiceImplement implements OrderDetailService {
         }
         else{
             return null;
+        }
+    }
+
+    @Override
+    public List<OrderDetail> getOrderDetailByArtWorkID(int artWorkId) {
+        Optional<Artwork> artworkOptional = artworkRepo.findByArtworkId(artWorkId);
+        if (artworkOptional.isPresent()) {
+            Artwork artwork = artworkOptional.get();
+            return orderDetailRepo.findOrderDetailByArtwork(artwork);
+        } else {
+            // Handle case when artwork is not found
+            return Collections.emptyList(); // Or throw an exception
         }
     }
 }

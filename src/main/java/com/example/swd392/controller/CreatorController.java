@@ -8,7 +8,9 @@ import com.example.swd392.Response.ObjectResponse.ResponseObject;
 import com.example.swd392.Response.UserResponse.ArtworkOrderDetailDTO;
 import com.example.swd392.Response.UserResponse.BalanceAccountResponse;
 import com.example.swd392.model.Artwork;
+import com.example.swd392.model.OrderDetail;
 import com.example.swd392.service.ArtworkService;
+import com.example.swd392.service.OrderDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +29,8 @@ public class CreatorController {
     @Autowired
     private ArtworkService artworkService;
 
+    @Autowired
+    private OrderDetailService detailService;
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('creator:delete')")
     public DeleteArtworkResponse deleteArtwork(@PathVariable("id") int artworkId) {
@@ -97,6 +101,11 @@ public class CreatorController {
     @PreAuthorize("hasAuthority('creator:read')")
     public List<ArtworkOrderDetailDTO> getOrderDetailsByArtworkID(@PathVariable int artworkID) {
         return artworkService.getOrderDetailsByArtworkID(artworkID);
+    }
+
+    @GetMapping("/orderDetails/{artWorkId}")
+    public List<OrderDetail> getOrderDetailByArtWorkID(@PathVariable int artWorkId) {
+        return detailService.getOrderDetailByArtWorkID(artWorkId);
     }
 
 

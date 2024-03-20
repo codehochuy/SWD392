@@ -25,7 +25,6 @@ public interface ArtworkRepo extends JpaRepository<Artwork,Integer> {
     @Query(value = "SELECT a.artworkid AS artworkId, " +
             "a.artwork_name AS artworkName, " +
             "a.artwork_url AS artworkUrl, " +
-            "a.posted_at AS postedAt, " +
             "a.price, " +
             "a.like_count AS likeCount, " +
             "a.comment_count AS commentCount, " +

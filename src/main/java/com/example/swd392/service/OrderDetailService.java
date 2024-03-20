@@ -12,4 +12,6 @@ public interface OrderDetailService {
     ResponseEntity<OrderDetailResponse> getAllOrderDetails(int orderID);
     CreateOrderDetailResponse createOrderDetail(CreateOrderDetailRequest request);
     List<OrderDetail> getOrderDetailsByOrderId(int orderId);
+
+    List<OrderDetail> getOrderDetailByArtWorkID(int artWorkId);
 }

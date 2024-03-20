@@ -218,17 +218,15 @@ public class ArtworkServiceImplement implements ArtworkService {
             int artworkId = (int) result[0];                   // artworkId
             String artworkName = (String) result[1];           // artworkName
             String artworkUrl = (String) result[2];            // artworkUrl
-            Timestamp timestamp = (Timestamp) result[3];      // postedAt as Timestamp
-            LocalDateTime postedAt = LocalDateTime.parse(timestamp.toString());  // Convert Timestamp to LocalDateTime
-            double price = (double) result[4];                 // price
-            int likeCount = (int) result[5];                   // likeCount
-            int commentCount = (int) result[6];                // commentCount
-            int buyCount = (int) result[7];                    // buyCount
-            int userId = (int) result[8];                      // userId
-            int orderDetailId = (int) result[9];               // orderDetailId
+            double price = (double) result[3];                 // price
+            int likeCount = (int) result[4];                   // likeCount
+            int commentCount = (int) result[5];                // commentCount
+            int buyCount = (int) result[6];                    // buyCount
+            int userId = (int) result[7];                      // userId
+            int orderDetailId = (int) result[8];               // orderDetailId
 
             ArtworkOrderDetailDTO dto = new ArtworkOrderDetailDTO(
-                    artworkId, artworkName, artworkUrl, postedAt,
+                    artworkId, artworkName, artworkUrl,
                     price, likeCount, commentCount, buyCount,
                     userId, orderDetailId
             );
