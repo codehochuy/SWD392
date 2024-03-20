@@ -110,8 +110,8 @@ public class AuthenticationController {
         int count = 10; // Set the count of artworks you want to fetch
         return artworkService.getListArtworkForGuest(count);
     }
-    @PostMapping("/sendArtworkInfo")
-    public ResponseEntity<?> sendArtworkInfo(@RequestParam int orderId) {
+    @PostMapping("/sendArtworkInfo/{orderId}")
+    public ResponseEntity<?> sendArtworkInfo(@PathVariable int orderId) {
         try {
             // Gọi dịch vụ để lấy thông tin chi tiết đơn hàng
             OrderDetailResponse orderDetailResponse = orderDetailService.getAllOrderDetails(orderId).getBody();
