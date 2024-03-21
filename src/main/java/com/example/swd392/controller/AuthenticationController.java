@@ -107,7 +107,7 @@ public class AuthenticationController {
     }
     @GetMapping("/random")
     public List<Artwork> getRandomArtworks() {
-        int count = 10; // Set the count of artworks you want to fetch
+        int count = 100; // Set the count of artworks you want to fetch
         return artworkService.getListArtworkForGuest(count);
     }
     @PostMapping("/sendArtworkInfo/{orderId}")
