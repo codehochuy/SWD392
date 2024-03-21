@@ -45,7 +45,8 @@ public class Artwork {
     private int commentCount;
 
     @Column(name = "BuyCount")
-    private int buyCount;
+//    private int buyCount;
+    private Integer buyCount;
 
     @ManyToOne
 //    @JsonIgnore

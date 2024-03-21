@@ -62,7 +62,10 @@ public class OrderDetailServiceImplement implements OrderDetailService {
                                 .build();
                         orderDetailRepo.save(orderDetail);
                         Artwork artwork = cartItem.getArtwork();
-                        artwork.setBuyCount(cartItem.getArtwork().getBuyCount() + 1);
+
+                        int currentBuyCount = (artwork.getBuyCount() == null) ? 0 : artwork.getBuyCount();
+                        artwork.setBuyCount(currentBuyCount + 1);
+//                        artwork.setBuyCount(cartItem.getArtwork().getBuyCount() + 1);
                         artworkRepo.save(artwork);
                         cartRepository.delete(cartItem);
                         User creator = orderDetail.getArtwork().getUser();
