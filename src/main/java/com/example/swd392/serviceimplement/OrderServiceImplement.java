@@ -100,7 +100,7 @@ public class OrderServiceImplement implements OrderService {
         var user = userRepo.findUserByUsersID(audience).orElse(null);
         if(user != null && (user.getRole() == Role.AUDIENCE || user.getRole()==Role.CREATOR)){
             double balance = user.getAccountBalance();
-            if(balance>orderPrice){
+            if(balance>=orderPrice){
                 user.setAccountBalance(user.getAccountBalance()-orderPrice);
                 List<Cart> cartItems = cartRepository.findByUser(user);
                 if (!cartItems.isEmpty()) {

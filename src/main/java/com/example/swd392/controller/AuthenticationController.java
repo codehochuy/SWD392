@@ -114,27 +114,36 @@ public class AuthenticationController {
     public ResponseEntity<?> sendArtworkInfo(@PathVariable int orderId) {
         try {
             // Gọi dịch vụ để lấy thông tin chi tiết đơn hàng
-            OrderDetailResponse orderDetailResponse = orderDetailService.getAllOrderDetails(orderId).getBody();
+            ResponseEntity<OrderDetailResponse> response = orderDetailService.getAllOrderDetails(orderId);
 
-            // Kiểm tra xem danh sách chi tiết đơn hàng có rỗng không
-            if (orderDetailResponse != null && !orderDetailResponse.getOrderDetails().isEmpty()) {
-                // Lấy thông tin chi tiết đơn hàng đầu tiên
-                OrderDetail orderDetail = orderDetailResponse.getOrderDetails().get(0);
-                String artworkUrl = orderDetail.getArtwork().getArtworkUrl();
-                String audienceEmail = orderDetail.getOrder().getAudience().getEmail();
+            if (response.getStatusCode() == HttpStatus.OK) {
+                OrderDetailResponse orderDetailResponse = response.getBody();
 
-                // Tạo nội dung email
-                String emailContent = "Artwork URL: " + artworkUrl ;
+                // Kiểm tra xem danh sách chi tiết đơn hàng có rỗng không
+                if (orderDetailResponse != null && !orderDetailResponse.getOrderDetails().isEmpty()) {
+                    StringBuilder emailContentBuilder = new StringBuilder();
 
-                // Gửi email
-                emailService.sendSimpleMessage(audienceEmail, "Artwork Information", emailContent);
+                    for (OrderDetail orderDetail : orderDetailResponse.getOrderDetails()) {
+                        String artworkUrl = orderDetail.getArtwork().getArtworkUrl();
+                        String audienceEmail = orderDetail.getOrder().getAudience().getEmail();
 
-                return ResponseEntity.ok("Email sent successfully");
+                        // Thêm thông tin chi tiết đơn hàng vào nội dung email
+                        emailContentBuilder.append("Artwork URL for order ").append(orderId).append(": ").append(artworkUrl).append("\n");
+
+                        // Gửi email cho mỗi đơn hàng
+                        emailService.sendSimpleMessage(audienceEmail, "Artwork Information", emailContentBuilder.toString());
+                    }
+
+                    return ResponseEntity.ok("Emails sent successfully");
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No data received from the API");
+                }
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No data received from the API");
+                return ResponseEntity.status(response.getStatusCode()).body("Failed to fetch order details");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
+
 }
